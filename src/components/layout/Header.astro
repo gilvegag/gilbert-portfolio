@@ -1,0 +1,35 @@
+---
+import { Linkedin, Mail } from "lucide-react"
+import { ThemeToggle } from "./ThemeToggle"
+---
+
+<header class="mx-auto flex w-full max-w-[1400px] items-center justify-between px-6 py-8 sm:px-8 lg:px-14">
+  <a href="/" class="text-base font-bold text-foreground">
+    GILBERT VEGA
+  </a>
+  <nav class="flex items-center gap-6 text-sm">
+    <a href="/#work" class="text-muted-foreground transition-colors hover:text-foreground">
+      Work
+    </a>
+    <a href="/#about" class="text-muted-foreground transition-colors hover:text-foreground">
+      About
+    </a>
+    <a
+      href="https://www.linkedin.com/in/gilvega/"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="LinkedIn"
+      class="text-muted-foreground transition-colors hover:text-foreground"
+    >
+      <Linkedin className="size-4" />
+    </a>
+    <a
+      href="mailto:gilberthvg@gmail.com"
+      aria-label="Email"
+      class="text-muted-foreground transition-colors hover:text-foreground"
+    >
+      <Mail className="size-4" />
+    </a>
+    <ThemeToggle client:load />
+  </nav>
+</header>

@@ -1,0 +1,91 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { Badge } from "@/components/ui/badge"
+
+interface Props {
+  project: CollectionEntry<"projects">
+}
+
+const { project } = Astro.props
+const {
+  title,
+  description,
+  company,
+  industry,
+  skills,
+  thumbnail,
+  thumbnailVertical,
+  thumbnailLandscape,
+  thumbnailFit,
+  thumbnailAspect,
+} = project.data
+
+const mobileImg = thumbnailLandscape ?? thumbnail
+const desktopImg = thumbnailVertical ?? thumbnail
+const isCoverRight = thumbnailFit === "cover-right"
+---
+
+<a
+  href={`/work/${project.slug}`}
+  data-reveal
+  class="group block overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10 transition-colors hover:ring-foreground/20"
+>
+  <div class="w-full overflow-hidden bg-muted">
+    {isCoverRight ? (
+      <>
+        {/* Mobile: crop anchored top-left, breathing room on top/left */}
+        <div class="aspect-video w-full overflow-hidden pt-6 pl-6 md:hidden">
+          <img
+            src={mobileImg}
+            alt={title}
+            class="size-full object-cover object-left-top transition-transform duration-300 group-hover:scale-[1.02]"
+            loading="lazy"
+          />
+        </div>
+        {/* Desktop: square frame (matches card height across the grid), crop anchored left, breathing room on top/left/bottom */}
+        <div class="hidden aspect-square w-full overflow-hidden pt-10 pb-10 pl-10 md:block">
+          <img
+            src={desktopImg}
+            alt={title}
+            class="size-full object-cover object-left transition-transform duration-300 group-hover:scale-[1.02]"
+            loading="lazy"
+          />
+        </div>
+      </>
+    ) : (
+      <>
+        {/* Mobile: full image, contained and centered, exact fit (no letterbox gap) */}
+        <div class="px-6 pt-6 md:hidden">
+          <div class="w-full overflow-hidden" style={{ aspectRatio: thumbnailAspect }}>
+            <img
+              src={mobileImg}
+              alt={title}
+              class="size-full object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+              loading="lazy"
+            />
+          </div>
+        </div>
+        {/* Desktop: square frame (matches card height across the grid), image touches the bottom */}
+        <div class="hidden aspect-square w-full overflow-hidden px-6 pt-6 md:block">
+          <img
+            src={desktopImg}
+            alt={title}
+            class="size-full object-contain transition-transform duration-300 group-hover:scale-[1.02]"
+            loading="lazy"
+          />
+        </div>
+      </>
+    )}
+  </div>
+  <div class="flex flex-col gap-3 p-6">
+    <div class="flex items-center justify-between text-xs text-muted-foreground">
+      <span>{company}</span>
+      <span>{industry}</span>
+    </div>
+    <h3 class="text-lg font-medium text-foreground">{title}</h3>
+    <p class="text-sm text-muted-foreground">{description}</p>
+    <div class="flex flex-wrap gap-1.5 pt-1">
+      {skills.map((skill) => <Badge variant="outline">{skill}</Badge>)}
+    </div>
+  </div>
+</a>

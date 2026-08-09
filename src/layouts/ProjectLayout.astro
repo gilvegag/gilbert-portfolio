@@ -1,0 +1,70 @@
+---
+import type { CollectionEntry } from "astro:content"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { Badge } from "@/components/ui/badge"
+import { projectThemes, themeToCssVars } from "@/data/project-colors"
+
+interface Props {
+  project: CollectionEntry<"projects">
+}
+
+const { project } = Astro.props
+const { title, description, company, role, industry, timeframe, skills, heroImage } =
+  project.data
+
+const theme = projectThemes[project.slug]
+const themeVars = theme ? themeToCssVars(theme) : undefined
+---
+
+<BaseLayout
+  title={`${title} — Gilbert Vega`}
+  description={description}
+  themeVars={themeVars}
+>
+  <article class="mx-auto w-full max-w-4xl px-6 py-12 sm:px-8">
+    <a
+      href="/#work"
+      class="text-sm text-muted-foreground transition-colors hover:text-foreground"
+    >
+      &larr; Back to work
+    </a>
+
+    <header class="mt-6 flex flex-col gap-6">
+      <h1 class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        {title}
+      </h1>
+      <p class="max-w-2xl text-lg text-muted-foreground">{description}</p>
+
+      <dl class="grid grid-cols-2 gap-x-8 gap-y-4 border-y border-border py-6 text-sm sm:grid-cols-4">
+        <div>
+          <dt class="text-muted-foreground">Company</dt>
+          <dd class="mt-1 text-foreground">{company}</dd>
+        </div>
+        <div>
+          <dt class="text-muted-foreground">Role</dt>
+          <dd class="mt-1 text-foreground">{role}</dd>
+        </div>
+        <div>
+          <dt class="text-muted-foreground">Industry</dt>
+          <dd class="mt-1 text-foreground">{industry}</dd>
+        </div>
+        <div>
+          <dt class="text-muted-foreground">Timeframe</dt>
+          <dd class="mt-1 text-foreground">{timeframe}</dd>
+        </div>
+      </dl>
+
+      <div class="flex flex-wrap gap-1.5">
+        {skills.map((skill) => <Badge variant="secondary">{skill}</Badge>)}
+      </div>
+    </header>
+
+    <div class="mt-10 overflow-hidden rounded-xl bg-muted">
+      <img src={heroImage} alt={title} class="w-full object-cover" />
+    </div>
+
+    <div class="prose mx-auto mt-12">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

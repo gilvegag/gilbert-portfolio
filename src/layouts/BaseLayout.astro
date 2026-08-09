@@ -1,0 +1,47 @@
+---
+import Header from "@/components/layout/Header.astro"
+import Footer from "@/components/layout/Footer.astro"
+import "@/styles/global.css"
+
+interface Props {
+  title: string
+  description: string
+  themeVars?: Record<string, string>
+}
+
+const { title, description, themeVars } = Astro.props
+const themeStyle = themeVars
+  ? Object.entries(themeVars)
+      .map(([key, value]) => `${key}:${value}`)
+      .join(";")
+  : undefined
+---
+
+<!doctype html>
+<html lang="en" class="dark" style={themeStyle}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <script is:inline>
+      const stored = localStorage.getItem("theme");
+      if (stored === "light") {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
+  </head>
+  <body>
+    <div class="flex min-h-screen flex-col">
+      <Header />
+      <main class="flex-1">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+    <script>
+      import "@/scripts/reveal.ts"
+    </script>
+  </body>
+</html>

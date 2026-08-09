@@ -1,0 +1,158 @@
+@import "tailwindcss";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Native cross-document View Transitions: smoothly crossfades the whole
+ * page (including its background color) between navigations, e.g. home ->
+ * a case study with its own accent color. Pure CSS, no JS router involved —
+ * unsupported browsers just navigate normally with no animation, so this
+ * can never break navigation itself.
+ */
+@view-transition {
+  navigation: auto;
+}
+
+:root {
+  /* Light mode — neutral, minimal, one accent */
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.15 0 0);
+  --card: oklch(0.97 0 0);
+  --card-foreground: oklch(0.15 0 0);
+  --primary: oklch(0.15 0 0);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.94 0 0);
+  --secondary-foreground: oklch(0.25 0 0);
+  --muted: oklch(0.94 0 0);
+  --muted-foreground: oklch(0.48 0 0);
+  --accent: oklch(0.6 0.17 258);
+  --accent-foreground: oklch(0.99 0 0);
+  --border: oklch(0.9 0 0);
+  --input: oklch(0.9 0 0);
+  --ring: oklch(0.6 0.17 258);
+  --radius: 0.75rem;
+}
+
+.dark {
+  /* Dark mode — near-black, matches the existing Framer site */
+  --background: oklch(0.14 0 0);
+  --foreground: oklch(0.96 0 0);
+  --card: oklch(0.19 0 0);
+  --card-foreground: oklch(0.96 0 0);
+  --primary: oklch(0.96 0 0);
+  --primary-foreground: oklch(0.14 0 0);
+  --secondary: oklch(0.24 0 0);
+  --secondary-foreground: oklch(0.9 0 0);
+  --muted: oklch(0.24 0 0);
+  --muted-foreground: oklch(0.65 0 0);
+  --accent: oklch(0.68 0.15 258);
+  --accent-foreground: oklch(0.14 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.68 0.15 258);
+}
+
+@theme inline {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    transition:
+      background-color 0.5s ease,
+      color 0.5s ease;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/*
+ * Scroll/load entrance animation, driven by src/scripts/reveal.ts.
+ * Wrapped in @layer so it stays below Tailwind's utilities layer in the
+ * cascade — unlayered CSS always wins over layered CSS regardless of
+ * specificity, which was silently clobbering hover:rotate-0 etc. on
+ * elements that also carry data-reveal.
+ */
+@layer base {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  [data-reveal].is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+/* Prose styles for case study markdown content */
+.prose {
+  @apply text-foreground leading-relaxed;
+  max-width: 65ch;
+}
+.prose h2 {
+  @apply mt-12 mb-4 text-xl font-semibold tracking-tight;
+}
+.prose h3 {
+  @apply mt-8 mb-3 text-lg font-semibold tracking-tight;
+}
+.prose p {
+  @apply mb-4 text-base text-muted-foreground;
+}
+.prose ul {
+  @apply mb-4 ml-6 list-disc space-y-1;
+}
+.prose ul li {
+  @apply text-base text-muted-foreground;
+}
+.prose strong {
+  @apply font-semibold text-foreground;
+}
+.prose em {
+  @apply italic;
+}
+.prose a {
+  @apply underline underline-offset-4 transition-colors hover:text-foreground;
+}
+.prose blockquote {
+  @apply my-6 border-l-2 border-accent pl-4 italic text-muted-foreground;
+}
+.prose hr {
+  @apply my-10 border-border;
+}
