@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content"
+import { User, Zap, TrendingUp } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 interface Props {
@@ -9,15 +10,15 @@ interface Props {
 const { project } = Astro.props
 const {
   title,
-  description,
-  company,
-  industry,
-  skills,
+  role,
   thumbnail,
   thumbnailVertical,
   thumbnailLandscape,
   thumbnailFit,
   thumbnailAspect,
+  cardTag,
+  cardHighlight,
+  cardImpact,
 } = project.data
 
 const mobileImg = thumbnailLandscape ?? thumbnail
@@ -77,15 +78,26 @@ const isCoverRight = thumbnailFit === "cover-right"
       </>
     )}
   </div>
-  <div class="flex flex-col gap-3 p-6">
-    <div class="flex items-center justify-between text-xs text-muted-foreground">
-      <span>{company}</span>
-      <span>{industry}</span>
+  <div class="flex flex-col gap-4 p-6">
+    <div class="flex flex-col gap-2">
+      <h3 class="text-lg font-medium text-foreground">{title}</h3>
+      <div>
+        <Badge variant="secondary">{cardTag}</Badge>
+      </div>
     </div>
-    <h3 class="text-lg font-medium text-foreground">{title}</h3>
-    <p class="text-sm text-muted-foreground">{description}</p>
-    <div class="flex flex-wrap gap-1.5 pt-1">
-      {skills.map((skill) => <Badge variant="outline">{skill}</Badge>)}
+    <div class="flex flex-col gap-2.5 opacity-60 transition-opacity duration-300 group-hover:opacity-100">
+      <div class="flex items-center gap-2.5 text-sm text-foreground">
+        <User className="size-4 shrink-0 text-muted-foreground" />
+        <span>{role}</span>
+      </div>
+      <div class="flex items-center gap-2.5 text-sm text-foreground">
+        <Zap className="size-4 shrink-0 text-muted-foreground" />
+        <span>{cardHighlight}</span>
+      </div>
+      <div class="flex items-center gap-2.5 text-sm text-foreground">
+        <TrendingUp className="size-4 shrink-0 text-muted-foreground" />
+        <span>{cardImpact}</span>
+      </div>
     </div>
   </div>
 </a>

@@ -1,5 +1,5 @@
 ---
-title: "OatFi"
+title: "Turning API only infrastructure into a sellable product"
 description: "Turning API-only fintech infrastructure into a product a sales team could sell."
 company: "OatFi"
 role: "Lead Product Designer (sole designer)"
@@ -11,6 +11,9 @@ thumbnailVertical: "/images/projects/oatfi/oatfi_thumbnail_vertical.png"
 thumbnailLandscape: "/images/projects/oatfi/oatfi_thumbnail_landscape.png"
 thumbnailAspect: "2782/1494"
 heroImage: "/images/projects/oatfi/feature-hero.jpg"
+cardTag: "Fintech"
+cardHighlight: "0→1 product"
+cardImpact: "10+ enterprise partners closed"
 type: "professional"
 sortOrder: 1
 draft: false
