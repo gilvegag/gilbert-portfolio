@@ -1,0 +1,21 @@
+---
+// Wraps each word of `text` in its own [data-reveal] span inside a
+// [data-reveal-group], so src/scripts/reveal.ts staggers them in
+// word-by-word on scroll/load — the same technique used for the big
+// headline on designdays.berlin/about.
+interface Props {
+  text: string
+  class?: string
+}
+
+const { text, class: className } = Astro.props
+const words = text.trim().split(/\s+/)
+---
+
+<span data-reveal-group class={className}>
+  {words.map((word, i) => (
+    <>
+      <span data-reveal class="inline-block">{word}</span>{i < words.length - 1 ? " " : ""}
+    </>
+  ))}
+</span>

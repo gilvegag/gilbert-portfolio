@@ -18,9 +18,9 @@ export interface ProjectTheme {
 
 export const projectThemes: Record<string, ProjectTheme> = {
   oatfi: {
-    background: "oklch(0.32 0.14 300)",
+    background: "#341872",
     foreground: "oklch(0.98 0 0)",
-    card: "oklch(0.38 0.13 300)",
+    card: "#2F1861",
     cardForeground: "oklch(0.98 0 0)",
     secondary: "oklch(1 0 0 / 12%)",
     secondaryForeground: "oklch(0.98 0 0)",

@@ -1,0 +1,54 @@
+---
+interface Props {
+  heading: string
+  body: string
+  image?: string
+  images?: string[]
+  imagePosition?: "right" | "below"
+}
+
+const { heading, body, image, images, imagePosition = "right" } = Astro.props
+const allImages = images ?? (image ? [image] : [])
+const hasImages = allImages.length > 0
+// When a section has more than one image, the text column stays pinned
+// (desktop only) while the taller image stack scrolls past it, then
+// scrolling continues normally into whatever comes next.
+const isScrollStack = allImages.length > 1
+---
+
+<div
+  class:list={[
+    "gap-8",
+    imagePosition === "right"
+      ? [
+          "grid grid-cols-1 md:grid-cols-2",
+          isScrollStack ? "md:items-start" : "md:items-center",
+        ]
+      : "flex flex-col",
+  ]}
+>
+  <div
+    class:list={[
+      "flex flex-col gap-3",
+      isScrollStack && "md:sticky md:top-32 md:self-start",
+    ]}
+  >
+    <h3 class="text-lg font-medium text-foreground">{heading}</h3>
+    <p class="text-base leading-relaxed text-muted-foreground">{body}</p>
+  </div>
+  {
+    hasImages ? (
+      <div class="flex flex-col gap-6">
+        {allImages.map((src) => (
+          <div class="overflow-hidden rounded-lg ring-1 ring-border">
+            <img src={src} alt={heading} class="w-full object-cover" loading="lazy" />
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="flex aspect-video items-center justify-center rounded-lg border border-dashed border-border bg-muted/40 text-xs text-muted-foreground">
+        Image coming soon
+      </div>
+    )
+  }
+</div>

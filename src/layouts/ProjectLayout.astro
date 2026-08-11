@@ -1,6 +1,9 @@
 ---
 import type { CollectionEntry } from "astro:content"
+import { Users, Search, MessageSquare, Star, Linkedin, Copy } from "lucide-react"
 import BaseLayout from "@/layouts/BaseLayout.astro"
+import CaseStudySection from "@/components/CaseStudySection.astro"
+import WordReveal from "@/components/WordReveal.astro"
 import { Badge } from "@/components/ui/badge"
 import { projectThemes, themeToCssVars } from "@/data/project-colors"
 
@@ -9,62 +12,412 @@ interface Props {
 }
 
 const { project } = Astro.props
-const { title, description, company, role, industry, timeframe, skills, heroImage } =
-  project.data
+const {
+  title,
+  description,
+  company,
+  role,
+  industry,
+  timeframe,
+  skills,
+  heroImage,
+  heroLogo,
+  cardTag,
+  problem,
+  approachItems,
+  solutionSections,
+  highlights,
+  testimonial,
+  ctaHeading,
+} = project.data
 
 const theme = projectThemes[project.slug]
-const themeVars = theme ? themeToCssVars(theme) : undefined
+const heroStyle = theme ? themeToCssVars(theme) : undefined
+// The content zone between the hero and the impact section sits on the
+// site's normal light/dark surface (so the theme toggle actually affects
+// it), not the brand color. It reads from the --surface-* tokens instead
+// of --background/--foreground directly, since those get overridden
+// page-wide by heroStyle on <html> (see BaseLayout's themeVars) — aliasing
+// straight to --background here would just inherit the brand color back.
+const contentStyle = {
+  "--background": "var(--surface)",
+  "--foreground": "var(--surface-foreground)",
+  "--muted-foreground": "var(--surface-muted-foreground)",
+  "--border": "var(--surface-border)",
+  "--muted": "var(--surface-muted)",
+  ...(theme
+    ? { "--accent": theme.accent, "--accent-foreground": theme.accentForeground, "--ring": theme.ring }
+    : {}),
+}
+
+const hasRichLayout = Boolean(solutionSections && solutionSections.length > 0)
+
+const approachIcons = {
+  users: Users,
+  search: Search,
+  "message-square": MessageSquare,
+  star: Star,
+}
+
+const navItems = [
+  { id: "problem", label: "The Problem", show: Boolean(problem) },
+  { id: "approach", label: "Approach", show: Boolean(approachItems?.length) },
+  { id: "solutions", label: "Solutions", show: Boolean(solutionSections?.length) },
+  { id: "impact", label: "Impact", show: Boolean(highlights?.length) },
+].filter((item) => item.show)
+
+// Splits a highlight string on *emphasis* markers so key phrases can be
+// rendered in the accent color, e.g. "Closed *10+ enterprise* deals".
+function splitHighlight(text: string) {
+  return text.split(/\*(.*?)\*/g).map((part, i) => ({ text: part, emphasis: i % 2 === 1 }))
+}
+
+// Same eyebrow-label style as the "Work" / "About" tags on the home page.
+const labelClass = "text-xs font-medium tracking-[0.1em] text-muted-foreground uppercase"
+const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] md:gap-16"
 ---
 
-<BaseLayout
-  title={`${title} — Gilbert Vega`}
-  description={description}
-  themeVars={themeVars}
->
-  <article class="mx-auto w-full max-w-4xl px-6 py-12 sm:px-8">
-    <a
-      href="/#work"
-      class="text-sm text-muted-foreground transition-colors hover:text-foreground"
-    >
-      &larr; Back to work
-    </a>
+<BaseLayout title={`${title} — Gilbert Vega`} description={description} themeVars={heroStyle}>
+  {
+    hasRichLayout ? (
+      <article>
+        <div id="hero" style={heroStyle} class="w-full bg-background text-foreground">
+          <div class="mx-auto w-full max-w-5xl px-6 py-6 sm:px-8">
+            <a
+              href="/#work"
+              class="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              &larr; Back to work
+            </a>
 
-    <header class="mt-6 flex flex-col gap-6">
-      <h1 class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-        {title}
-      </h1>
-      <p class="max-w-2xl text-lg text-muted-foreground">{description}</p>
+            <div class="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-center lg:gap-12">
+              <div class="flex flex-col gap-5">
+                {heroLogo && <img src={heroLogo} alt="" class="h-9 w-auto self-start" />}
+                <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">
+                  <WordReveal text={title} />
+                </h1>
+                {cardTag && (
+                  <div>
+                    <Badge variant="secondary">{cardTag}</Badge>
+                  </div>
+                )}
+              </div>
+              <div class="overflow-hidden rounded-xl">
+                {heroImage ? (
+                  <img src={heroImage} alt={title} class="w-full object-cover" />
+                ) : (
+                  <div class="flex aspect-4/3 items-center justify-center border border-dashed border-white/15 bg-white/5 text-xs text-muted-foreground">
+                    Image coming soon
+                  </div>
+                )}
+              </div>
+            </div>
 
-      <dl class="grid grid-cols-2 gap-x-8 gap-y-4 border-y border-border py-6 text-sm sm:grid-cols-4">
-        <div>
-          <dt class="text-muted-foreground">Company</dt>
-          <dd class="mt-1 text-foreground">{company}</dd>
+            <dl class="mt-10 grid grid-cols-2 gap-x-8 gap-y-4 border-t border-border py-6 text-sm sm:grid-cols-4">
+              <div>
+                <dt class="text-muted-foreground">Company</dt>
+                <dd class="mt-1">{company}</dd>
+              </div>
+              <div>
+                <dt class="text-muted-foreground">Role</dt>
+                <dd class="mt-1">{role}</dd>
+              </div>
+              <div>
+                <dt class="text-muted-foreground">Industry</dt>
+                <dd class="mt-1">{industry}</dd>
+              </div>
+              <div>
+                <dt class="text-muted-foreground">Timeframe</dt>
+                <dd class="mt-1">{timeframe}</dd>
+              </div>
+            </dl>
+          </div>
         </div>
-        <div>
-          <dt class="text-muted-foreground">Role</dt>
-          <dd class="mt-1 text-foreground">{role}</dd>
-        </div>
-        <div>
-          <dt class="text-muted-foreground">Industry</dt>
-          <dd class="mt-1 text-foreground">{industry}</dd>
-        </div>
-        <div>
-          <dt class="text-muted-foreground">Timeframe</dt>
-          <dd class="mt-1 text-foreground">{timeframe}</dd>
-        </div>
-      </dl>
 
-      <div class="flex flex-wrap gap-1.5">
-        {skills.map((skill) => <Badge variant="secondary">{skill}</Badge>)}
-      </div>
-    </header>
+        <div id="content-zone" style={contentStyle} class="w-full bg-background text-foreground">
+          <div class="mx-auto flex w-full max-w-5xl flex-col gap-24 px-6 py-16 sm:px-8">
+            {problem && (
+              <div id="problem" data-reveal data-reveal-group class={rowClass}>
+                <p class={labelClass}>The Problem</p>
+                <div class="flex flex-col gap-5">
+                  <p class="text-base leading-relaxed text-muted-foreground">{problem.intro}</p>
+                  <ul class="flex list-disc flex-col gap-3 pl-5 marker:text-muted-foreground">
+                    {problem.points.map((point) => (
+                      <li class="text-base leading-relaxed text-muted-foreground">{point}</li>
+                    ))}
+                  </ul>
+                  {problem.closing && (
+                    <p class="text-base leading-relaxed text-muted-foreground">{problem.closing}</p>
+                  )}
+                  {problem.stakes && (
+                    <p class="border-l-2 border-accent pl-6 text-xl leading-relaxed font-medium text-foreground">
+                      {problem.stakes}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
 
-    <div class="mt-10 overflow-hidden rounded-xl bg-muted">
-      <img src={heroImage} alt={title} class="w-full object-cover" />
-    </div>
+            {approachItems && approachItems.length > 0 && (
+              <div id="approach" data-reveal data-reveal-group class={rowClass}>
+                <p class={labelClass}>Approach</p>
+                <div class="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                  {approachItems.map((item) => {
+                    const Icon = approachIcons[item.icon]
+                    return (
+                      <div class="flex flex-col gap-2">
+                        <Icon className="size-5 text-accent" strokeWidth={1.5} />
+                        <p class="text-lg font-medium text-foreground">{item.title}</p>
+                        <p class="text-base leading-relaxed text-muted-foreground">
+                          {item.description}
+                        </p>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
 
-    <div class="prose mx-auto mt-12">
-      <slot />
-    </div>
-  </article>
+            {solutionSections && solutionSections.length > 0 && (
+              <div id="solutions" data-reveal data-reveal-group class={rowClass}>
+                <p class={labelClass}>Solutions</p>
+                <div class="flex flex-col gap-16">
+                  {solutionSections.map((section) => (
+                    <CaseStudySection
+                      heading={section.heading}
+                      body={section.body}
+                      image={section.image}
+                      images={section.images}
+                      imagePosition={section.imagePosition}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+          </div>
+        </div>
+
+        {(highlights?.length || testimonial || ctaHeading) && (
+          <div style={heroStyle} class="w-full bg-background text-foreground">
+            <div data-reveal-group class="mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 py-16 sm:px-8">
+              {highlights && highlights.length > 0 && (
+                <div id="impact" data-reveal class={rowClass}>
+                  <p class={`${labelClass} !text-accent`}>Impact</p>
+                  <ul class="flex flex-col gap-6">
+                    {highlights.map((item) => (
+                      <li class="flex items-start gap-4">
+                        <span class="mt-2.5 size-1.5 shrink-0 rounded-full bg-accent" />
+                        <span class="text-lg leading-relaxed">
+                          {splitHighlight(item).map((part) =>
+                            part.emphasis ? <span class="text-accent">{part.text}</span> : part.text
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {testimonial && (
+                <div data-reveal class="rounded-2xl bg-card px-8 py-10 sm:px-10">
+                  <p class="text-lg leading-relaxed sm:text-xl">&ldquo;{testimonial.quote}&rdquo;</p>
+                  <div class="mt-6 flex items-center gap-3">
+                    {testimonial.avatar && (
+                      <img
+                        src={testimonial.avatar}
+                        alt={testimonial.author}
+                        class="size-10 rounded-full object-cover"
+                      />
+                    )}
+                    <p class="text-sm text-muted-foreground">
+                      {testimonial.author} - {testimonial.role}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {ctaHeading && (
+                <div data-reveal class="flex flex-col gap-4">
+                  <p class="text-lg font-medium">{ctaHeading}</p>
+                  <div class="flex flex-wrap gap-3">
+                    <a
+                      href="https://www.linkedin.com/in/gilvega/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-2 rounded-full border border-foreground/25 px-5 py-2.5 text-sm font-medium transition-colors hover:bg-foreground/10"
+                    >
+                      <Linkedin className="size-4" />
+                      LinkedIn
+                    </a>
+                    <button
+                      type="button"
+                      data-copy-email="gilberthvg@gmail.com"
+                      class="inline-flex items-center gap-2 rounded-full border border-foreground/25 px-5 py-2.5 text-sm font-medium transition-colors hover:bg-foreground/10"
+                    >
+                      <Copy className="size-4" />
+                      <span data-copy-label>Email</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <slot />
+            </div>
+          </div>
+        )}
+
+        {navItems.length > 0 && (
+          <nav
+            id="case-study-nav"
+            aria-label="Case study sections"
+            style={{ "--nav-color": "#ffffff", transition: "color 0.3s ease" }}
+            class="hidden lg:fixed lg:top-1/2 lg:left-8 lg:z-10 lg:flex lg:w-36 lg:-translate-y-1/2 lg:flex-col lg:gap-3"
+          >
+            {navItems.map((item) => (
+              <a
+                href={`#${item.id}`}
+                data-nav-link={item.id}
+                class="text-[var(--nav-color)] text-sm opacity-70 transition-opacity hover:opacity-100 data-[active=true]:font-medium data-[active=true]:opacity-100"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        )}
+
+        <script>
+          function initCaseStudyNav() {
+            const nav = document.getElementById("case-study-nav")
+            if (!nav) return
+            const links = Array.from(nav.querySelectorAll("[data-nav-link]"))
+            const sections = links
+              .map((link) => document.getElementById(link.getAttribute("data-nav-link") ?? ""))
+              .filter((el): el is HTMLElement => Boolean(el))
+
+            function setActive(id: string) {
+              links.forEach((link) => {
+                link.setAttribute(
+                  "data-active",
+                  String(link.getAttribute("data-nav-link") === id)
+                )
+              })
+            }
+
+            const observer = new IntersectionObserver(
+              (entries) => {
+                const visible = entries.filter((entry) => entry.isIntersecting)
+                if (visible.length === 0) return
+                const topMost = visible.sort(
+                  (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
+                )[0]
+                setActive(topMost.target.id)
+              },
+              { rootMargin: "-20% 0px -70% 0px" }
+            )
+            sections.forEach((section) => observer.observe(section))
+
+            // The nav is fixed at the vertical center of the viewport, so it
+            // drifts over both the always-purple hero/impact sections and
+            // the content zone (which follows the light/dark toggle). A
+            // single static color can't stay legible against both, so we
+            // watch whether the content zone currently covers the nav's
+            // position and switch between a fixed light color (for the
+            // purple sections) and the toggle-aware surface color.
+            const contentZone = document.getElementById("content-zone")
+            if (contentZone) {
+              const zoneObserver = new IntersectionObserver(
+                ([entry]) => {
+                  nav.style.setProperty(
+                    "--nav-color",
+                    entry.isIntersecting ? "var(--surface-foreground)" : "#ffffff"
+                  )
+                },
+                { rootMargin: "-50% 0px -50% 0px" }
+              )
+              zoneObserver.observe(contentZone)
+            }
+          }
+
+          function initCopyEmail() {
+            const button = document.querySelector<HTMLButtonElement>("[data-copy-email]")
+            if (!button) return
+            const label = button.querySelector("[data-copy-label]")
+            if (!label) return
+            const defaultLabel = label.textContent
+
+            button.addEventListener("click", async () => {
+              const email = button.getAttribute("data-copy-email") ?? ""
+              try {
+                await navigator.clipboard.writeText(email)
+                label.textContent = "Copied!"
+                setTimeout(() => {
+                  label.textContent = defaultLabel
+                }, 1800)
+              } catch {
+                // Clipboard API unavailable — no-op, button still shows the email intent.
+              }
+            })
+          }
+
+          if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", () => {
+              initCaseStudyNav()
+              initCopyEmail()
+            })
+          } else {
+            initCaseStudyNav()
+            initCopyEmail()
+          }
+        </script>
+      </article>
+    ) : (
+      <article class="mx-auto w-full max-w-4xl px-6 py-12 sm:px-8">
+        <a
+          href="/#work"
+          class="text-sm text-muted-foreground transition-colors hover:text-foreground"
+        >
+          &larr; Back to work
+        </a>
+
+        <header class="mt-6 flex flex-col gap-6">
+          <h1 class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            <WordReveal text={title} />
+          </h1>
+          <p class="max-w-2xl text-lg text-muted-foreground">{description}</p>
+
+          <dl class="grid grid-cols-2 gap-x-8 gap-y-4 border-y border-border py-6 text-sm sm:grid-cols-4">
+            <div>
+              <dt class="text-muted-foreground">Company</dt>
+              <dd class="mt-1 text-foreground">{company}</dd>
+            </div>
+            <div>
+              <dt class="text-muted-foreground">Role</dt>
+              <dd class="mt-1 text-foreground">{role}</dd>
+            </div>
+            <div>
+              <dt class="text-muted-foreground">Industry</dt>
+              <dd class="mt-1 text-foreground">{industry}</dd>
+            </div>
+            <div>
+              <dt class="text-muted-foreground">Timeframe</dt>
+              <dd class="mt-1 text-foreground">{timeframe}</dd>
+            </div>
+          </dl>
+
+          <div class="flex flex-wrap gap-1.5">
+            {skills.map((skill) => <Badge variant="secondary">{skill}</Badge>)}
+          </div>
+        </header>
+
+        <div class="mt-10 overflow-hidden rounded-xl bg-muted">
+          <img src={heroImage} alt={title} class="w-full object-cover" />
+        </div>
+
+        <div class="prose mx-auto mt-12">
+          <slot />
+        </div>
+      </article>
+    )
+  }
 </BaseLayout>

@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import ProjectCard from "@/components/ProjectCard.astro"
+import WordReveal from "@/components/WordReveal.astro"
 import { Badge } from "@/components/ui/badge"
 
 const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
@@ -36,14 +37,8 @@ const skills = [
     class="mx-auto flex w-full max-w-[1400px] flex-col gap-10 px-6 py-16 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:px-14 lg:py-28"
   >
     <div class="flex max-w-2xl flex-col gap-6">
-      <h1
-        data-reveal
-        class="text-xl leading-snug font-normal tracking-tight text-foreground sm:text-2xl lg:text-3xl"
-      >
-        Product designer with over a decade of experience designing complex
-        products and shaping design systems. I work end to end, bring strong
-        visual craft, and know how to close the gap between design and
-        engineering.
+      <h1 class="text-xl leading-snug font-normal tracking-tight text-foreground sm:text-2xl lg:text-3xl">
+        <WordReveal text="Product designer with over a decade of experience designing complex products and shaping design systems. I work end to end, bring strong visual craft, and know how to close the gap between design and engineering." />
       </h1>
       <div data-reveal class="flex flex-wrap gap-2">
         <Badge variant="secondary">Senior Product Designer</Badge>
@@ -78,13 +73,14 @@ const skills = [
 
   <section
     id="about"
+    data-reveal-group
     class="mx-auto w-full max-w-[1400px] px-6 pb-24 sm:px-8 lg:px-14"
   >
     <p class="mb-6 text-xs font-medium tracking-[0.1em] text-muted-foreground uppercase">
       About
     </p>
     <div class="flex max-w-2xl flex-col gap-12">
-      <div class="flex flex-col gap-6">
+      <div data-reveal class="flex flex-col gap-6">
         <p class="text-base leading-relaxed text-muted-foreground">
           I've been working in UX and product design since 2012. Over the past
           five years, I've really enjoyed focusing on consulting for enterprise
@@ -102,7 +98,7 @@ const skills = [
         </p>
       </div>
 
-      <div class="flex flex-col gap-4">
+      <div data-reveal class="flex flex-col gap-4">
         <h2 class="text-sm font-medium tracking-wide text-muted-foreground uppercase">
           Skills
         </h2>
