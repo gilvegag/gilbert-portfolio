@@ -398,23 +398,24 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
           }
 
           function initCopyEmail() {
-            const button = document.querySelector<HTMLButtonElement>("[data-copy-email]")
-            if (!button) return
-            const label = button.querySelector("[data-copy-label]")
-            if (!label) return
-            const defaultLabel = label.textContent
+            const buttons = document.querySelectorAll<HTMLButtonElement>("main [data-copy-email]")
+            buttons.forEach((button) => {
+              const label = button.querySelector("[data-copy-label]")
+              if (!label) return
+              const defaultLabel = label.textContent
 
-            button.addEventListener("click", async () => {
-              const email = button.getAttribute("data-copy-email") ?? ""
-              try {
-                await navigator.clipboard.writeText(email)
-                label.textContent = "Copied!"
-                setTimeout(() => {
-                  label.textContent = defaultLabel
-                }, 1800)
-              } catch {
-                // Clipboard API unavailable — no-op, button still shows the email intent.
-              }
+              button.addEventListener("click", async () => {
+                const email = button.getAttribute("data-copy-email") ?? ""
+                try {
+                  await navigator.clipboard.writeText(email)
+                  label.textContent = "Copied!"
+                  setTimeout(() => {
+                    label.textContent = defaultLabel
+                  }, 1800)
+                } catch {
+                  // Clipboard API unavailable — no-op, button still shows the email intent.
+                }
+              })
             })
           }
 
