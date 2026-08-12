@@ -2,6 +2,7 @@
 title: "Turning API only infrastructure into a sellable product"
 description: "Turning API-only fintech infrastructure into a product a sales team could sell."
 company: "OatFi"
+companyUrl: "https://oatfi.com/"
 role: "Lead Product Designer (sole designer)"
 industry: "Fintech · Embedded Lending"
 timeframe: "Jul 2022 – Sep 2023"
@@ -69,6 +70,7 @@ testimonial:
   author: "Paola Calderón"
   role: "Product Manager"
   avatar: "/images/projects/oatfi/paola.png"
+  linkedin: "https://www.linkedin.com/in/paola-calder%C3%B3n-g%C3%B3mez-2802566a/"
 ctaHeading: "Contact me for the full case-study"
 type: "professional"
 sortOrder: 1

@@ -1,10 +1,11 @@
 ---
-title: "Accuray Design System"
-description: "Built from scratch: tokens, Figma UI Kit, Storybook integration, and an AI-assisted documentation pipeline."
+title: "From Zero to Scale: Building a design system from the ground up"
+description: "Building Accuray's first design system from scratch — tokens, components, and AI-assisted documentation for nine satellite products."
 company: "Accuray (via Gorilla Logic)"
+companyUrl: "https://www.accuray.com/"
 role: "Senior Product Designer · Design System Lead"
-industry: "Healthcare · Design Systems"
-timeframe: "Dec 2021 – Mar 2026"
+industry: "HealthTech · Radiotherapy Planning Software"
+timeframe: "2022 – 2026"
 skills: ["Design Systems at Scale", "Design Tokens", "Storybook", "Accessibility (WCAG)", "AI-Assisted Workflows"]
 thumbnail: "/images/projects/accuray-design-system/design-system-thumbnail.png"
 thumbnailVertical: "/images/projects/accuray-design-system/design-system-thumbnail.png"
@@ -14,57 +15,53 @@ thumbnailAspect: "1912/1758"
 heroImage: "/images/projects/accuray-design-system/design-system-thumbnail.png"
 cardTag: "Design Systems"
 cardHighlight: "Built from scratch"
-cardImpact: "5 weeks dev time saved"
+cardImpact: "~10 weeks dev time saved"
+problem:
+  intro: "Accuray was migrating a legacy radiotherapy planning system to web, with nine satellite products expected to consume the same foundation. When I joined the pilot, three designers shared one Adobe XD file, no components, no patterns, no documentation, and Material Angular was fighting the product on every release."
+  closing: "As the sole designer, my challenge was to build a system that could serve the pilot first and scale into nine products, without a dedicated budget and without pausing feature work."
+approachItems:
+  - icon: "star"
+    title: "Built the case for it myself"
+    description: "I decided the design system was mine to push. Stakeholder mapping, phased roadmap, technical allies aligned early, so the pitch would land as a business initiative, not a designer's wish."
+  - icon: "search"
+    title: "Mapped patterns with OOUX"
+    description: "I used Object-Oriented UX to figure out which components mattered most across the pilot and the satellite products, so the roadmap was informed by real reuse."
+  - icon: "users"
+    title: "Scoped it against real releases"
+    description: "No fantasy roadmap. Every foundation, component, and pattern tied to a specific product release, so the work stayed defensible in prioritization meetings."
+  - icon: "message-square"
+    title: "Committed to tokens from day one"
+    description: "Tokens as the contract between design and engineering, chosen early so theming and platform expansion were possible later without a rewrite."
+solutionSections:
+  - heading: "Making the case, and getting the go ahead"
+    body: "Everyone agreed the fragmentation was a problem. No one was going to fix it. I decided it was mine to lead: mapped stakeholders, aligned the Frontend Lead and DevOps early, and prepared a phased roadmap tied to real product releases. When the business decided the pilot would become the template for the rest of the company, I pitched it. It got approved without a budget, and I had planned for that. What I got was influence and permission to allocate my own time. That was enough to start."
+    imagePosition: "right"
+    visual: "ppt-carousel"
+  - heading: "AI assisted workflow"
+    body: "I designed and operate the entire documentation layer with an AI assisted pipeline: tokens exported from Figma to JSON, Claude drafting component docs, and the reference site itself built in Figma Sites with Claude scaffolding pages and copy. Without the AI layer, the reference site would have taken months I did not have. This is what let a working documentation site ship in parallel with the components it documented."
+    images:
+      [
+        "/images/projects/accuray-design-system/pipeline01.png",
+        "/images/projects/accuray-design-system/pipeline02.png",
+        "/images/projects/accuray-design-system/pipeline03.png",
+      ]
+    imagePosition: "right"
+  - heading: "How the system works"
+    body: "Figma is where tokens and components live. Claude turns that source into documentation and scaffolds the reference site in Figma Sites. Storybook is the shared workshop where design and engineering run visual QA together. Consuming products pull tokens as CSS variables and components as code, so parity is enforced by structure, not by discipline."
+    imagePosition: "right"
+    visual: "diagram"
+  - heading: "Adoption model"
+    body: "The system was not going to adopt itself. I partnered with the Scrum Master and Product Owner to protect dedicated frontend capacity in every sprint. Before every PI, my UX Lead and I prioritized the backlog so tickets were always ready when engineers had capacity. Adoption was not a launch. It was a rhythm I designed and maintained."
+    imagePosition: "right"
+    visual: "pills"
+highlights:
+  - "*2 satellite products* adopted the system, with a third in progress when I rolled off."
+  - "*~90% of general purpose components* migrated into the shared library."
+  - "*~10 weeks* of repetitive frontend work saved in the first three months across the pilot and the first adopting product."
+  - "*Survived two ramp downs* — when two designers were laid off and priorities shifted, our design capacity did not drop proportionally, because the system was already absorbing repetitive work."
+  - "Shifted how the company thinks about design systems, from a design deliverable to a *shared responsibility with engineering*. That mindset shift is what made adopting AI workflows feel natural when they came."
+ctaHeading: "Contact me for the full case-study"
 type: "professional"
 sortOrder: 2
 draft: false
 ---
-
-When I joined Accuray, three designers were working on the same Figma file with no shared components, no shared library, and no consistent patterns. Every decision was being made from scratch, every time. I proposed, sold, and built a design system that changed that, without any extra resources or dedicated time to do it.
-
-## The Starting Point
-
-The design assets when I arrived were a basic color guide and screenshots from two legacy desktop systems. Nothing was reusable. Nothing was documented. And the team was under pressure to deliver high-priority flows to development at the same time.
-
-It was clear a design system was needed. It was equally clear nobody was going to hand me time or budget to build one.
-
-## Getting Buy-In Without Extra Resources
-
-Before touching a single component I wrote a structured proposal and presented it to the development team and the general manager. I outlined the business case, a realistic roadmap, and what the long-term savings in development time and maintenance would look like.
-
-No extra resources were approved. But I got something more useful: trust, and the room to allocate my own time to it alongside my other responsibilities.
-
-## Understanding What the Company Actually Needed
-
-I met with three development managers responsible for nine different systems across the company. I wanted to understand their experience with design systems, their concerns, and their technical constraints before building anything.
-
-That research shaped everything. The existing systems were built on outdated technology, and the new product was being developed in Angular. That meant we couldn't migrate existing assets. We had to build a modern, reusable framework from scratch.
-
-## Building It
-
-I started with the most frequently used components in Figma, applying proper structure, variants, and reusability from the beginning. Introducing a shared library gave the team a foundation to work from consistently for the first time.
-
-But a design system only works if it lives in both design and code. I worked closely with developers to make sure UI components were implemented in the codebase, and defined a workflow that kept designers and developers aligned throughout. Together with the Frontend Lead and DevOps, we integrated Storybook as a development environment for component testing, so components could be validated in isolation before deployment.
-
-## The Reference Site, Built Without Extra Tooling Costs
-
-Rather than adding new tools to the budget, I built the system's reference site entirely in Figma Sites. That gave me complete control over the documentation and kept costs down.
-
-To generate the documentation itself I built an AI-assisted workflow using Make and Claude to synthesize design token data from JSON into clear, structured guidelines. I set this up entirely on my own. What would have taken weeks of manual documentation work became a repeatable, scalable process.
-
-## Growing Beyond One Product
-
-When another application within the company expressed interest in adopting the design definitions, I worked to position the system as a company-wide resource rather than a single-product tool.
-
-A patient enrollment application, which allows doctors to adjust treatment settings before a patient is ready for radiotherapy, became the second product to adopt it. A third is currently in the process of doing the same.
-
-## Results
-
-- Saved approximately 5 weeks of development time through component reuse across a parallel application
-- Unified design patterns across Product A for the first time
-- Established a framework now being adopted by multiple applications across the company
-- Built the entire reference site and AI-assisted documentation pipeline independently, with no additional tooling budget
-
-## The Bigger Picture
-
-This wasn't just a Figma library. It was the first time Accuray had a shared language between design and development. The components, the documentation, the Storybook integration, the reference site, all of it was built while I was still delivering UX work on the main product. That's the part I'm most proud of.

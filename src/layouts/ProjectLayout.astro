@@ -1,9 +1,8 @@
 ---
 import type { CollectionEntry } from "astro:content"
-import { Users, Search, MessageSquare, Star, Linkedin, Copy } from "lucide-react"
+import { Users, Search, MessageSquare, Star, Linkedin, Copy, ArrowUpRight } from "lucide-react"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import CaseStudySection from "@/components/CaseStudySection.astro"
-import WordReveal from "@/components/WordReveal.astro"
 import { Badge } from "@/components/ui/badge"
 import { projectThemes, themeToCssVars } from "@/data/project-colors"
 
@@ -16,11 +15,13 @@ const {
   title,
   description,
   company,
+  companyUrl,
   role,
   industry,
   timeframe,
   skills,
   heroImage,
+  heroImageRounded,
   heroLogo,
   cardTag,
   problem,
@@ -93,16 +94,14 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
             <div class="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-center lg:gap-12">
               <div class="flex flex-col gap-5">
                 {heroLogo && <img src={heroLogo} alt="" class="h-9 w-auto self-start" />}
-                <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">
-                  <WordReveal text={title} />
-                </h1>
+                <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
                 {cardTag && (
                   <div>
                     <Badge variant="secondary">{cardTag}</Badge>
                   </div>
                 )}
               </div>
-              <div class="overflow-hidden rounded-xl">
+              <div class:list={["overflow-hidden", heroImageRounded && "rounded-xl"]}>
                 {heroImage ? (
                   <img src={heroImage} alt={title} class="w-full object-cover" />
                 ) : (
@@ -116,7 +115,21 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
             <dl class="mt-10 grid grid-cols-2 gap-x-8 gap-y-4 border-t border-border py-6 text-sm sm:grid-cols-4">
               <div>
                 <dt class="text-muted-foreground">Company</dt>
-                <dd class="mt-1">{company}</dd>
+                <dd class="mt-1">
+                  {companyUrl ? (
+                    <a
+                      href={companyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-1 transition-opacity hover:opacity-80"
+                    >
+                      {company}
+                      <ArrowUpRight className="size-3.5 shrink-0" />
+                    </a>
+                  ) : (
+                    company
+                  )}
+                </dd>
               </div>
               <div>
                 <dt class="text-muted-foreground">Role</dt>
@@ -141,13 +154,25 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
                 <p class={labelClass}>The Problem</p>
                 <div class="flex flex-col gap-5">
                   <p class="text-base leading-relaxed text-muted-foreground">{problem.intro}</p>
-                  <ul class="flex list-disc flex-col gap-3 pl-5 marker:text-muted-foreground">
-                    {problem.points.map((point) => (
-                      <li class="text-base leading-relaxed text-muted-foreground">{point}</li>
-                    ))}
-                  </ul>
+                  {problem.points && problem.points.length > 0 && (
+                    <ul class="flex list-disc flex-col gap-3 pl-5 marker:text-muted-foreground">
+                      {problem.points.map((point) => (
+                        <li class="text-base leading-relaxed text-muted-foreground">{point}</li>
+                      ))}
+                    </ul>
+                  )}
                   {problem.closing && (
                     <p class="text-base leading-relaxed text-muted-foreground">{problem.closing}</p>
+                  )}
+                  {problem.challenges && problem.challenges.length > 0 && (
+                    <div class="flex flex-col gap-3">
+                      <p class="text-sm font-medium text-foreground">Key challenges</p>
+                      <ol class="flex list-decimal flex-col gap-3 pl-5 marker:text-muted-foreground">
+                        {problem.challenges.map((challenge) => (
+                          <li class="text-base leading-relaxed text-muted-foreground">{challenge}</li>
+                        ))}
+                      </ol>
+                    </div>
                   )}
                   {problem.stakes && (
                     <p class="border-l-2 border-accent pl-6 text-xl leading-relaxed font-medium text-foreground">
@@ -166,7 +191,7 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
                     const Icon = approachIcons[item.icon]
                     return (
                       <div class="flex flex-col gap-2">
-                        <Icon className="size-5 text-accent" strokeWidth={1.5} />
+                        <Icon className="size-5 text-foreground" strokeWidth={1.5} />
                         <p class="text-lg font-medium text-foreground">{item.title}</p>
                         <p class="text-base leading-relaxed text-muted-foreground">
                           {item.description}
@@ -189,6 +214,9 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
                       image={section.image}
                       images={section.images}
                       imagePosition={section.imagePosition}
+                      link={section.link}
+                      visual={section.visual}
+                      beforeAfter={section.beforeAfter}
                     />
                   ))}
                 </div>
@@ -222,24 +250,47 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
               {testimonial && (
                 <div data-reveal class="rounded-2xl bg-card px-8 py-10 sm:px-10">
                   <p class="text-lg leading-relaxed sm:text-xl">&ldquo;{testimonial.quote}&rdquo;</p>
-                  <div class="mt-6 flex items-center gap-3">
-                    {testimonial.avatar && (
-                      <img
-                        src={testimonial.avatar}
-                        alt={testimonial.author}
-                        class="size-10 rounded-full object-cover"
-                      />
-                    )}
-                    <p class="text-sm text-muted-foreground">
-                      {testimonial.author} - {testimonial.role}
-                    </p>
-                  </div>
+                  {testimonial.linkedin ? (
+                    <a
+                      href={testimonial.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="group mt-6 flex items-center gap-3"
+                    >
+                      {testimonial.avatar && (
+                        <img
+                          src={testimonial.avatar}
+                          alt={testimonial.author}
+                          class="size-10 rounded-full object-cover"
+                        />
+                      )}
+                      <p class="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
+                        <span class="underline-offset-2 group-hover:underline">
+                          {testimonial.author}
+                        </span>{" "}
+                        - {testimonial.role}
+                      </p>
+                    </a>
+                  ) : (
+                    <div class="mt-6 flex items-center gap-3">
+                      {testimonial.avatar && (
+                        <img
+                          src={testimonial.avatar}
+                          alt={testimonial.author}
+                          class="size-10 rounded-full object-cover"
+                        />
+                      )}
+                      <p class="text-sm text-muted-foreground">
+                        {testimonial.author} - {testimonial.role}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 
               {ctaHeading && (
                 <div data-reveal class="flex flex-col gap-4">
-                  <p class="text-lg font-medium">{ctaHeading}</p>
+                  <p class="text-2xl font-semibold text-[var(--cta-foreground)]">{ctaHeading}</p>
                   <div class="flex flex-wrap gap-3">
                     <a
                       href="https://www.linkedin.com/in/gilvega/"
@@ -382,14 +433,28 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
 
         <header class="mt-6 flex flex-col gap-6">
           <h1 class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            <WordReveal text={title} />
+            {title}
           </h1>
           <p class="max-w-2xl text-lg text-muted-foreground">{description}</p>
 
           <dl class="grid grid-cols-2 gap-x-8 gap-y-4 border-y border-border py-6 text-sm sm:grid-cols-4">
             <div>
               <dt class="text-muted-foreground">Company</dt>
-              <dd class="mt-1 text-foreground">{company}</dd>
+              <dd class="mt-1 text-foreground">
+                {companyUrl ? (
+                  <a
+                    href={companyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1 transition-opacity hover:opacity-80"
+                  >
+                    {company}
+                    <ArrowUpRight className="size-3.5 shrink-0" />
+                  </a>
+                ) : (
+                  company
+                )}
+              </dd>
             </div>
             <div>
               <dt class="text-muted-foreground">Role</dt>

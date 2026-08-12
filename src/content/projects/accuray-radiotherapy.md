@@ -1,76 +1,69 @@
 ---
-title: "Accuray Radixact"
-description: "A three-year project to migrate two legacy clinical systems into one web platform, while rebuilding how the design team operated from the inside."
-company: "Accuray (via Gorilla Logic)"
+title: "Evolving a radiotherapy planning system into web"
+description: "Merging two legacy desktop radiotherapy planning systems into one FDA-regulated web platform for Accuray."
+company: "Accuray"
+companyUrl: "https://www.accuray.com/"
 role: "Senior Product Designer"
 industry: "Healthcare · Radiotherapy"
-timeframe: "Dec 2021 – Mar 2026"
+timeframe: "Dec 2022 – Mar 2026"
 skills: ["Complex SaaS Workflows", "Product Discovery", "Accessibility (WCAG)", "UX Research", "Data-Dense UI"]
 thumbnail: "/images/projects/accuray-radiotherapy/accuray_main_thumbnail.png"
 thumbnailVertical: "/images/projects/accuray-radiotherapy/accuray_main_thumbnail.png"
 thumbnailLandscape: "/images/projects/accuray-radiotherapy/accuray_main_thumbnail.png"
 thumbnailFit: "cover-right"
 thumbnailAspect: "3840/2148"
-heroImage: "/images/projects/accuray-radiotherapy/accuray_main_thumbnail.png"
+heroImage: "/images/projects/accuray-radiotherapy/hero.png"
+heroImageRounded: false
 cardTag: "Healthcare"
 cardHighlight: "2 legacy systems → 1 platform"
 cardImpact: "Presented at ASTRO & ESTRO"
+problem:
+  intro: "Accuray builds software that helps doctors and therapists plan radiation treatments for cancer patients. They use it to mark the tumor and organs on a scan, decide how much radiation to deliver and where, and review the plan before treatment. These tools had grown as separate desktop applications over many years, and the business needed to bring parts of the two main ones into a single web platform:"
+  points:
+    - "So clinicians could adjust plans faster, sometimes the same day of treatment"
+    - "So doctors could work remotely instead of being tied to the clinic"
+    - "So two independently grown systems could finally feel like one product"
+  closing: "Started on a design team of three. After a round of layoffs I became the only product designer left, working alongside the usability lead. No dedicated researcher and no budget for research tools, so we leaned on interviews and validation sessions with the doctors and therapists who use the product every day. FDA regulated, so every change had to justify itself against compliance."
+  challenges:
+    - "No cohesive structure across the migrated tabs"
+    - "The image viewer, where clinicians actually spend their time, was cramped and hard to work in"
+    - "Error handling that pulled clinicians out of the workflow at the worst possible moment"
+solutionSections:
+  - heading: "A shared foundation, before touching the specifics"
+    body: "The obvious move was to fix the most visibly broken screens first. I made a different call: fix the foundation once, and every specific fix on top would compound. I ran walkthroughs with the doctors and therapists who had years of shortcuts in their heads and turned it into a journey map. Then I designed one structure for how any tab is organized: where navigation lives, where controls live, where the clinical content lives. Same mental model across the whole plan. That sequencing decision is what everything downstream sits on."
+    image: "/images/projects/accuray-radiotherapy/shared-found.png"
+    imagePosition: "right"
+  - heading: "The image viewer as protagonist"
+    body: "The viewer is where clinicians actually look at the patient's scan and mark what they see. Around it were permanent side panels listing every organ at once, even though therapists focus on one or two at a time. I made the panels hideable and pushed the viewer to lead. One decision paid off three ways: more working space for the scan, easier comparison between scans across treatment days, and a responsive behavior that finally held up when doctors opened sessions from home."
+    image: "/images/projects/accuray-radiotherapy/image-view.png"
+    imagePosition: "right"
+    beforeAfter:
+      before: "/images/projects/accuray-radiotherapy/before.png"
+      after: "/images/projects/accuray-radiotherapy/after.png"
+  - heading: "Error handling as a system"
+    body: "Nearly every error routed the user to customer service via a full screen modal. In a product where a plan can change the day of treatment, that breaks the workflow at the worst moment. I documented every error type, mapped each to a severity level, and defined the response per category: inline for validation, toasts for recoverable system errors, modals only for what genuinely must stop the user. Support became the exception, not the default."
+    image: "/images/projects/accuray-radiotherapy/error.png"
+    imagePosition: "right"
+  - heading: "The system underneath"
+    body: "Running in parallel with the product work was a design system I built from scratch, and an AI assisted documentation pipeline that grew out of it. Both became their own company initiative and their own story."
+    image: "/images/projects/accuray-radiotherapy/design-system.png"
+    imagePosition: "right"
+    link:
+      label: "Read the design system case study"
+      href: "/work/accuray-design-system"
+highlights:
+  - "Merged two legacy desktop systems into *one FDA regulated web platform*, sequenced from a shared foundation up."
+  - "Reframed error handling into a *severity based system* where support became the exception, not the default."
+  - "Recovered *a couple of minutes per treatment session* on setup and review, multiplied across a busy center."
+  - "Presented at *ASTRO and ESTRO*, two international radiotherapy conferences, with positive usability feedback from clinicians."
+testimonial:
+  quote: "What stood out most about Gil was his ability to turn complexity into clarity. He quickly understood nuanced clinical workflows and translated them into thoughtful designs, interactive prototypes, and clear workflow diagrams that aligned stakeholders and accelerated decision-making. He asked great questions, surfaced edge cases early, and delivered on time with minimal oversight. He raised the bar for our UX practice. I'd gladly work with him again and recommend him without hesitation."
+  author: "Cristina Negrut"
+  role: "Staff Engineer, Usability and UX Lead"
+  avatar: "/images/projects/accuray-radiotherapy/cristina.jpeg"
+  linkedin: "https://www.linkedin.com/in/cristina-negrut-30b7511/"
+ctaHeading: "Contact me for the full case-study"
 type: "professional"
 sortOrder: 3
 draft: false
 ---
-
-Accuray builds software for radiotherapy treatment planning used by clinicians around the world. I joined as the senior UX/UI designer on a three year project to migrate two legacy desktop systems into a single modern web platform, working closely with the UX Lead. Beyond the screens, I helped reshape how the design team operated inside the company.
-
-## The Challenge
-
-Clinicians were working with an outdated radiation therapy planning system. Navigation was confusing, workflows were inefficient, and there was no room for real-time collaboration. These aren't just usability problems. In radiotherapy planning, every extra step is time a patient spends on the treatment table.
-
-The goal was to bring those two desktop tools together into one web-based platform with AI capabilities, built to support doctors under real clinical pressure.
-
-## What I Found When I Joined
-
-There wasn't a coherent product yet. What existed were scattered components and artboards filled with screenshots from two different desktop systems. The vision was clear but the path wasn't.
-
-The team was also not set up to move fast. There were no established design processes, no regular touchpoints with product owners or front-end developers, and the other designers on the team came primarily from clinical and usability backgrounds rather than product design. Rather than working around that, I spent time running sessions with them to build a shared understanding of how browsers and front-end development work. That investment built trust, and that trust gave me the room to take ownership of the parts of the product that needed it most.
-
-## Building the Conditions for Good Design
-
-One of the first things I did was define design values and a north star for the team. Without that, decisions were inconsistent and slow. I introduced structured feedback sessions where designs were reviewed regularly, which sped up iteration and reduced back and forth later in the process.
-
-I also established alignment sessions with product owners and front-end developers. With engineering specifically, we made it a practice to inspect code together and do visual QA side by side. That changed the relationship between design and development from handoff to collaboration.
-
-These weren't glamorous contributions but they made everything else possible.
-
-## Understanding the Users
-
-There was already some user knowledge inside the company but it was mostly informal. Together with my lead I ran walkthroughs and targeted interviews with clinicians to give that knowledge more structure.
-
-Three things came out of that research clearly. Precision, visibility, and speed were non-negotiable. Legacy systems created friction through poor navigation and confusing interactions. And some workflows had to stay exactly as they were for compliance reasons, while others had real room to improve.
-
-We turned those insights into an empathy map that became a reference point for the whole team when making design decisions.
-
-## The QA Flow: Full Ownership From Sketch to Testing
-
-The area where I had complete end-to-end ownership was the Quality Assurance flow. This is a critical moment in treatment planning where doctors need to compare dose calculations from two different systems before proceeding. Under the old setup that meant switching back and forth between separate applications while a patient waited.
-
-I redesigned this from the ground up, from initial sketches through wireframes, high-fidelity prototypes, and multiple rounds of usability testing. The result was a single unified view where both sets of data lived side by side. Clinicians no longer had to jump between systems at a moment when their full attention needed to be on the patient.
-
-## Presented at ASTRO and ESTRO
-
-Although the platform hasn't launched commercially yet, it was presented at ASTRO and ESTRO, the two most important radiotherapy conferences in the world. Clinicians tested its core features directly and the feedback centered on one thing consistently: how much more usable it felt compared to the existing tools. That kind of validation from the people who will actually use it under clinical conditions is hard to come by before a product ships.
-
-## Results
-
-- Two legacy desktop systems merged into one web platform
-- QA comparison workflow reduced from two separate systems to a single unified view
-- Design values, north star, and feedback culture introduced from scratch
-- Regular alignment sessions established between design, product, and engineering
-- Design system started and later adopted as a standalone company initiative
-- Product presented at ASTRO and ESTRO with positive usability feedback from clinicians
-
-## What the UX Lead Said
-
-> "What stood out most about Gil was his ability to turn complexity into clarity. He quickly understood nuanced clinical workflows and translated them into thoughtful designs, interactive prototypes, and clear workflow diagrams that aligned stakeholders and accelerated decision-making. He asked great questions, surfaced edge cases early, and delivered on time with minimal oversight. He raised the bar for our UX practice. I'd gladly work with him again and recommend him without hesitation."
->
-> — Cristina Negrut, Staff Engineer, Usability and UX Lead

@@ -1,13 +1,30 @@
 ---
+import SystemDiagram from "@/components/SystemDiagram.astro"
+import CommunityPillsMarquee from "@/components/CommunityPillsMarquee.astro"
+import PptCarousel from "@/components/PptCarousel.astro"
+import BeforeAfterSlider from "@/components/BeforeAfterSlider.astro"
+
 interface Props {
   heading: string
   body: string
   image?: string
   images?: string[]
   imagePosition?: "right" | "below"
+  link?: { label: string; href: string }
+  visual?: "diagram" | "pills" | "ppt-carousel"
+  beforeAfter?: { before: string; after: string }
 }
 
-const { heading, body, image, images, imagePosition = "right" } = Astro.props
+const {
+  heading,
+  body,
+  image,
+  images,
+  imagePosition = "right",
+  link,
+  visual,
+  beforeAfter,
+} = Astro.props
 const allImages = images ?? (image ? [image] : [])
 const hasImages = allImages.length > 0
 // When a section has more than one image, the text column stays pinned
@@ -16,39 +33,60 @@ const hasImages = allImages.length > 0
 const isScrollStack = allImages.length > 1
 ---
 
-<div
-  class:list={[
-    "gap-8",
-    imagePosition === "right"
-      ? [
-          "grid grid-cols-1 md:grid-cols-2",
-          isScrollStack ? "md:items-start" : "md:items-center",
-        ]
-      : "flex flex-col",
-  ]}
->
+<div class="flex flex-col gap-8">
   <div
     class:list={[
-      "flex flex-col gap-3",
-      isScrollStack && "md:sticky md:top-32 md:self-start",
+      "gap-8",
+      imagePosition === "right"
+        ? [
+            "grid grid-cols-1 md:grid-cols-2",
+            isScrollStack ? "md:items-start" : "md:items-center",
+          ]
+        : "flex flex-col",
     ]}
   >
-    <h3 class="text-lg font-medium text-foreground">{heading}</h3>
-    <p class="text-base leading-relaxed text-muted-foreground">{body}</p>
+    <div
+      class:list={[
+        "flex flex-col gap-3",
+        isScrollStack && "md:sticky md:top-32 md:self-start",
+      ]}
+    >
+      <h3 class="text-lg font-medium text-foreground">{heading}</h3>
+      <p class="text-base leading-relaxed text-muted-foreground">{body}</p>
+      {link && (
+        <a
+          href={link.href}
+          class="mt-1 inline-flex w-fit items-center gap-2 rounded-full border border-foreground/25 px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-foreground/10"
+        >
+          {link.label} &rarr;
+        </a>
+      )}
+    </div>
+    {
+      visual === "diagram" ? (
+        <SystemDiagram />
+      ) : visual === "pills" ? (
+        <CommunityPillsMarquee />
+      ) : visual === "ppt-carousel" ? (
+        <PptCarousel />
+      ) : hasImages ? (
+        <div class="flex flex-col gap-6">
+          {allImages.map((src) => (
+            <div class="overflow-hidden rounded-lg ring-1 ring-border">
+              <img src={src} alt={heading} class="w-full object-cover" loading="lazy" />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="flex aspect-video items-center justify-center rounded-lg border border-dashed border-border bg-muted/40 text-xs text-muted-foreground">
+          Image coming soon
+        </div>
+      )
+    }
   </div>
-  {
-    hasImages ? (
-      <div class="flex flex-col gap-6">
-        {allImages.map((src) => (
-          <div class="overflow-hidden rounded-lg ring-1 ring-border">
-            <img src={src} alt={heading} class="w-full object-cover" loading="lazy" />
-          </div>
-        ))}
-      </div>
-    ) : (
-      <div class="flex aspect-video items-center justify-center rounded-lg border border-dashed border-border bg-muted/40 text-xs text-muted-foreground">
-        Image coming soon
-      </div>
-    )
-  }
+  {beforeAfter && (
+    <div class="mt-6">
+      <BeforeAfterSlider before={beforeAfter.before} after={beforeAfter.after} />
+    </div>
+  )}
 </div>

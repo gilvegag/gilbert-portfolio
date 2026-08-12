@@ -1,0 +1,46 @@
+---
+// Recreates the infinite pill marquee from
+// dannyckm.com/works/scotiabank-design-system — same copy and emojis,
+// alternating-direction rows, edges faded with a mask-image gradient.
+// Duplicating each row's items once and animating to -50%/0 loops
+// seamlessly since both halves are identical.
+const rows = [
+  [
+    { emoji: "⏰", label: "Weekly open office hours" },
+    { emoji: "🎨", label: "Weekly design internal sync" },
+  ],
+  [
+    { emoji: "🚀", label: "Monthly demo" },
+    { emoji: "🛫️", label: "Design system onboarding" },
+  ],
+  [
+    { emoji: "🤍", label: "Weekly accessibility touchpoint" },
+    { emoji: "", label: "Slack channel" },
+  ],
+]
+
+const directions = ["marquee-left", "marquee-right", "marquee-left"]
+const durations = [24, 28, 26]
+---
+
+<div class="flex w-full min-w-0 flex-col gap-3">
+  {rows.map((row, i) => (
+    <div
+      class="relative w-full min-w-0 overflow-hidden"
+      style="mask-image: linear-gradient(to right, transparent 0%, black 12.5%, black 87.5%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12.5%, black 87.5%, transparent 100%);"
+    >
+      <ul
+        data-marquee
+        class="flex w-max items-center gap-2.5 py-1"
+        style={`animation: ${directions[i]} ${durations[i]}s linear infinite;`}
+      >
+        {[...row, ...row].map((item) => (
+          <li class="flex shrink-0 items-center gap-2 rounded-full border border-foreground/25 px-4 py-2 text-sm text-foreground">
+            {item.emoji && <span>{item.emoji}</span>}
+            <span>{item.label}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</div>

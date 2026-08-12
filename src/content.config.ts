@@ -8,6 +8,14 @@ const solutionSection = z.object({
   image: z.string().startsWith("/images/projects/").optional(),
   images: z.array(z.string().startsWith("/images/projects/")).optional(),
   imagePosition: z.enum(["right", "below"]).default("right"),
+  link: z.object({ label: z.string(), href: z.string() }).optional(),
+  visual: z.enum(["diagram", "pills", "ppt-carousel"]).optional(),
+  beforeAfter: z
+    .object({
+      before: z.string().startsWith("/images/projects/"),
+      after: z.string().startsWith("/images/projects/"),
+    })
+    .optional(),
 })
 
 const projects = defineCollection({
@@ -16,6 +24,7 @@ const projects = defineCollection({
     title: z.string(),
     description: z.string().max(160),
     company: z.string(),
+    companyUrl: z.string().url().optional(),
     role: z.string(),
     industry: z.string(),
     timeframe: z.string(),
@@ -26,6 +35,7 @@ const projects = defineCollection({
     thumbnailFit: z.enum(["contain", "cover-right"]).default("contain"),
     thumbnailAspect: z.string().default("16/9"),
     heroImage: z.string().startsWith("/images/projects/").optional(),
+    heroImageRounded: z.boolean().default(true),
     cardTag: z.string(),
     cardHighlight: z.string(),
     cardImpact: z.string(),
@@ -37,8 +47,9 @@ const projects = defineCollection({
     problem: z
       .object({
         intro: z.string(),
-        points: z.array(z.string()),
+        points: z.array(z.string()).optional(),
         closing: z.string().optional(),
+        challenges: z.array(z.string()).optional(),
         stakes: z.string().optional(),
       })
       .optional(),
@@ -53,6 +64,7 @@ const projects = defineCollection({
         author: z.string(),
         role: z.string(),
         avatar: z.string().startsWith("/images/projects/").optional(),
+        linkedin: z.string().url().optional(),
       })
       .optional(),
     ctaHeading: z.string().optional(),
