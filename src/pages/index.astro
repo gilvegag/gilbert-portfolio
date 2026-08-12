@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content"
+import { Figma, Rocket } from "lucide-react"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import ProjectCard from "@/components/ProjectCard.astro"
 import { Badge } from "@/components/ui/badge"
@@ -110,6 +111,27 @@ const skills = [
         <div class="flex flex-wrap gap-2">
           {skills.map((skill) => <Badge variant="secondary">{skill}</Badge>)}
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto w-full max-w-[1400px] px-6 pb-16 sm:px-8 lg:px-14">
+    <div
+      data-reveal
+      class="flex flex-col items-center gap-8 border-t border-border pt-12 text-center"
+    >
+      <p class="max-w-2xl text-base leading-snug font-normal tracking-tight text-foreground sm:text-lg lg:text-xl">
+        Designed in Figma. Built with Astro and Claude Code.
+      </p>
+      <div class="flex items-center gap-6 text-muted-foreground">
+        <Figma aria-label="Figma" className="size-5" strokeWidth={1.5} />
+        <Rocket aria-label="Astro" className="size-5" strokeWidth={1.5} />
+        <span
+          role="img"
+          aria-label="Claude Code"
+          class="inline-block size-5 bg-current"
+          style="mask-image:url(/images/logos/claude.png); -webkit-mask-image:url(/images/logos/claude.png); mask-size:contain; -webkit-mask-size:contain; mask-repeat:no-repeat; -webkit-mask-repeat:no-repeat; mask-position:center; -webkit-mask-position:center;"
+        />
       </div>
     </div>
   </section>

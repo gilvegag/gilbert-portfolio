@@ -14,6 +14,7 @@ thumbnailFit: "cover-right"
 thumbnailAspect: "3840/2148"
 heroImage: "/images/projects/accuray-radiotherapy/hero.png"
 heroImageRounded: false
+heroLogo: "/images/projects/accuray-radiotherapy/logo.png"
 cardTag: "Healthcare"
 cardHighlight: "2 legacy systems → 1 platform"
 cardImpact: "Presented at ASTRO & ESTRO"

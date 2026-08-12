@@ -13,6 +13,7 @@ thumbnailLandscape: "/images/projects/accuray-design-system/design-system-thumbn
 thumbnailFit: "contain"
 thumbnailAspect: "1912/1758"
 heroImage: "/images/projects/accuray-design-system/design-system-thumbnail.png"
+heroLogo: "/images/projects/accuray-design-system/logo.png"
 cardTag: "Design Systems"
 cardHighlight: "Built from scratch"
 cardImpact: "~10 weeks dev time saved"
