@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content"
-import { Figma, Rocket } from "lucide-react"
+import { Figma, Rocket, Linkedin, Copy } from "lucide-react"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import ProjectCard from "@/components/ProjectCard.astro"
 import { Badge } from "@/components/ui/badge"
@@ -88,19 +88,24 @@ const skills = [
     <div class="flex max-w-2xl flex-col gap-12">
       <div data-reveal class="flex flex-col gap-6">
         <p class="text-base leading-relaxed text-muted-foreground">
-          I've been working in UX and product design since 2012. Over the past
-          five years, I've really enjoyed focusing on consulting for enterprise
-          solutions in B2B, fintech, and healthcare. I find these areas
-          fascinating because they present such interesting challenges to
-          tackle.
+          I've been designing since 2012. I started as a graphic designer,
+          moved into front-end development, then into visual and product
+          design. Over the past five years, I've focused on enterprise B2B
+          consulting in fintech and healthcare, where the problems are messy,
+          the systems are complex, and the design decisions actually matter.
         </p>
         <p class="text-base leading-relaxed text-muted-foreground">
-          I love sharing what I've learned, but I'm also a continuous learner
-          myself. Attending conferences, speaking about design, and discovering
-          new methods and technologies is a big part of what keeps me excited
-          about this field. I'm always eager to pick up new skills. I'm
-          currently experimenting with AI using Cursor, Figma MCP and Figma
-          Make.
+          That path trained me to think in systems and components before
+          pixels. I see the full picture first, then zoom into the specific
+          problem worth solving. It also made me tool-agnostic: when you
+          understand the underlying patterns, picking up a new tool is just
+          syntax. Right now that means applying AI to my workflow with
+          Claude Code and Cursor, and I'm genuinely curious about shaping how
+          AI shows up in products people use.
+        </p>
+        <p class="text-base leading-relaxed text-muted-foreground">
+          I'm comfortable in ambiguity. I like being the one who finds the
+          structure in it.
         </p>
       </div>
 
@@ -110,6 +115,29 @@ const skills = [
         </h2>
         <div class="flex flex-wrap gap-2">
           {skills.map((skill) => <Badge variant="secondary">{skill}</Badge>)}
+        </div>
+      </div>
+
+      <div data-reveal class="flex flex-col gap-4">
+        <p class="text-2xl font-semibold text-foreground">Contact me</p>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="https://www.linkedin.com/in/gilvega/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-full border border-foreground/25 px-5 py-2.5 text-sm font-medium transition-colors hover:bg-foreground/10"
+          >
+            <Linkedin className="size-4" />
+            LinkedIn
+          </a>
+          <button
+            type="button"
+            data-copy-email="gilberthvg@gmail.com"
+            class="inline-flex items-center gap-2 rounded-full border border-foreground/25 px-5 py-2.5 text-sm font-medium transition-colors hover:bg-foreground/10"
+          >
+            <Copy className="size-4" />
+            <span data-copy-label>Email</span>
+          </button>
         </div>
       </div>
     </div>
@@ -136,3 +164,32 @@ const skills = [
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  function initCopyEmail() {
+    const button = document.querySelector<HTMLButtonElement>("main [data-copy-email]")
+    if (!button) return
+    const label = button.querySelector("[data-copy-label]")
+    if (!label) return
+    const defaultLabel = label.textContent
+
+    button.addEventListener("click", async () => {
+      const email = button.getAttribute("data-copy-email") ?? ""
+      try {
+        await navigator.clipboard.writeText(email)
+        label.textContent = "Copied!"
+        setTimeout(() => {
+          label.textContent = defaultLabel
+        }, 1800)
+      } catch {
+        // Clipboard API unavailable — no-op, button still shows the email intent.
+      }
+    })
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCopyEmail)
+  } else {
+    initCopyEmail()
+  }
+</script>
