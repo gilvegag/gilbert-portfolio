@@ -6,11 +6,13 @@ const pillClass =
   "inline-flex items-center gap-1.5 rounded-full border border-foreground/25 px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-foreground/10"
 ---
 
-<header class="mx-auto flex w-full max-w-[1400px] items-center justify-between px-6 py-8 sm:px-8 lg:px-14">
+<header
+  class="mx-auto flex w-full max-w-[1400px] flex-col items-start gap-4 px-6 py-8 sm:flex-row sm:items-center sm:justify-between sm:gap-0 sm:px-8 lg:px-14"
+>
   <a href="/" class="text-base font-bold text-foreground">
     GILBERT VEGA
   </a>
-  <nav class="flex items-center gap-6 text-sm">
+  <nav class="flex flex-wrap items-center gap-6 text-sm">
     <a href="/#work" class="text-muted-foreground transition-colors hover:text-foreground">
       Work
     </a>

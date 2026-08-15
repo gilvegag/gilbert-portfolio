@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content"
-import { Users, Search, MessageSquare, Star, Linkedin, Copy, ArrowUpRight } from "lucide-react"
+import { Users, Search, MessageSquare, Star, Linkedin, Copy, ArrowUpRight, X } from "lucide-react"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import CaseStudySection from "@/components/CaseStudySection.astro"
 import { Badge } from "@/components/ui/badge"
@@ -53,6 +53,10 @@ const contentStyle = {
 
 const hasRichLayout = Boolean(solutionSections && solutionSections.length > 0)
 
+// Experiment: image lightbox, scoped to a single project for now while we
+// try it out. Promote to a frontmatter field once the pattern is validated.
+const hasImageLightbox = project.slug === "accuray-radiotherapy"
+
 const approachIcons = {
   users: Users,
   search: Search,
@@ -79,6 +83,7 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
 ---
 
 <BaseLayout title={`${title} — Gilbert Vega`} description={description} themeVars={heroStyle}>
+  <div id="page-curtain" aria-hidden="true"></div>
   {
     hasRichLayout ? (
       <article>
@@ -110,7 +115,19 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
               </div>
               <div class:list={["overflow-hidden", heroImageRounded && "rounded-xl"]}>
                 {heroImage ? (
-                  <img src={heroImage} alt={title} class="w-full object-cover" />
+                  hasImageLightbox ? (
+                    <button
+                      type="button"
+                      data-lightbox-trigger
+                      data-lightbox-src={heroImage}
+                      data-lightbox-alt={title}
+                      class="block w-full cursor-pointer"
+                    >
+                      <img src={heroImage} alt={title} class="w-full object-cover" />
+                    </button>
+                  ) : (
+                    <img src={heroImage} alt={title} class="w-full object-cover" />
+                  )
                 ) : (
                   <div class="flex aspect-4/3 items-center justify-center border border-dashed border-white/15 bg-white/5 text-xs text-muted-foreground">
                     Image coming soon
@@ -493,4 +510,179 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
       </article>
     )
   }
+
+  {
+    hasImageLightbox && (
+      <>
+        <div id="image-lightbox" data-lightbox-overlay aria-hidden="true">
+          <div class="lightbox-content">
+            <button type="button" data-lightbox-close class="lightbox-close-btn">
+              <X className="size-4" />
+              Close
+            </button>
+            <img data-lightbox-image src="" alt="" />
+          </div>
+        </div>
+        <span data-lightbox-cursor-tag aria-hidden="true">
+          Click to expand
+        </span>
+      </>
+    )
+  }
 </BaseLayout>
+
+<style>
+  #page-curtain {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: linear-gradient(180deg, var(--background) 0%, var(--background) 92%, transparent 100%);
+    pointer-events: none;
+    animation: curtain-up 0.65s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+  @keyframes curtain-up {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-100%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #page-curtain {
+      display: none;
+    }
+  }
+
+  #image-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in oklch, black 70%, transparent);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.25s ease,
+      visibility 0.25s ease;
+  }
+  #image-lightbox.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  .lightbox-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+    max-width: 60vw;
+    transform: scale(0.96);
+    transition: transform 0.25s ease;
+  }
+  #image-lightbox.is-open .lightbox-content {
+    transform: scale(1);
+  }
+  .lightbox-content img {
+    max-width: 60vw;
+    max-height: 60vh;
+    width: auto;
+    height: auto;
+    border-radius: 0.75rem;
+    object-fit: contain;
+    box-shadow: 0 25px 60px -15px rgb(0 0 0 / 0.5);
+  }
+  .lightbox-close-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 9999px;
+    background: white;
+    color: black;
+    font-size: 0.8rem;
+    font-weight: 500;
+    box-shadow: 0 4px 14px rgb(0 0 0 / 0.25);
+    transition: opacity 0.15s ease;
+  }
+  .lightbox-close-btn:hover {
+    opacity: 0.85;
+  }
+</style>
+
+<style is:global>
+  [data-lightbox-cursor-tag] {
+    position: fixed;
+    z-index: 300;
+    pointer-events: none;
+    background: black;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.3rem 0.65rem;
+    border-radius: 9999px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    white-space: nowrap;
+  }
+  [data-lightbox-cursor-tag].is-visible {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  function initImageLightbox() {
+    const triggers = document.querySelectorAll<HTMLButtonElement>("[data-lightbox-trigger]")
+    if (!triggers.length) return
+
+    const overlay = document.querySelector<HTMLDivElement>("[data-lightbox-overlay]")
+    const image = document.querySelector<HTMLImageElement>("[data-lightbox-image]")
+    const closeButton = document.querySelector<HTMLButtonElement>("[data-lightbox-close]")
+    const cursorTag = document.querySelector<HTMLSpanElement>("[data-lightbox-cursor-tag]")
+    if (!overlay || !image || !closeButton) return
+
+    function open(src: string, alt: string) {
+      image!.src = src
+      image!.alt = alt
+      overlay!.classList.add("is-open")
+      document.body.style.overflow = "hidden"
+    }
+
+    function close() {
+      overlay!.classList.remove("is-open")
+      document.body.style.overflow = ""
+    }
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener("click", () => {
+        const src = trigger.getAttribute("data-lightbox-src") ?? ""
+        const alt = trigger.getAttribute("data-lightbox-alt") ?? ""
+        open(src, alt)
+      })
+
+      if (cursorTag) {
+        trigger.addEventListener("mouseenter", () => cursorTag.classList.add("is-visible"))
+        trigger.addEventListener("mouseleave", () => cursorTag.classList.remove("is-visible"))
+        trigger.addEventListener("mousemove", (e) => {
+          cursorTag.style.left = `${e.clientX + 16}px`
+          cursorTag.style.top = `${e.clientY + 16}px`
+        })
+      }
+    })
+
+    closeButton.addEventListener("click", close)
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) close()
+    })
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") close()
+    })
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initImageLightbox)
+  } else {
+    initImageLightbox()
+  }
+</script>
