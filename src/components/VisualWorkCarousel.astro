@@ -1,0 +1,43 @@
+---
+// Recreates the "Shipped with Framer" showcase marquee from framer.com —
+// two rows of mixed-aspect-ratio screenshots, top row drifting left,
+// bottom row drifting right, clipped to a single rounded container (no
+// edge fade — a hard clip, matching Framer's boxed look). Images already
+// carry their own rounded corners, so no wrapper styling is needed beyond
+// sizing. Duplicating each row's images once and animating to -50%/0
+// loops seamlessly since both halves are identical.
+const topImages = [
+  "/images/home/carousel/01top.png",
+  "/images/home/carousel/02top.png",
+  "/images/home/carousel/03top.png",
+  "/images/home/carousel/04top.png",
+]
+const bottomImages = [
+  "/images/home/carousel/01bottom.png",
+  "/images/home/carousel/02bottom.png",
+  "/images/home/carousel/03bottom.png",
+  "/images/home/carousel/04bottom.png",
+  "/images/home/carousel/05bottom.png",
+]
+---
+
+<div class="flex w-full min-w-0 flex-col gap-4 overflow-hidden rounded-2xl">
+  <div class="relative w-full min-w-0 overflow-hidden">
+    <ul data-marquee class="flex w-max items-center gap-4" style="animation: marquee-left 48s linear infinite;">
+      {[...topImages, ...topImages].map((src) => (
+        <li class="flex h-40 shrink-0 items-center sm:h-56 lg:h-72">
+          <img src={src} alt="" class="h-full w-auto" loading="lazy" />
+        </li>
+      ))}
+    </ul>
+  </div>
+  <div class="relative w-full min-w-0 overflow-hidden">
+    <ul data-marquee class="flex w-max items-center gap-4" style="animation: marquee-right 52s linear infinite;">
+      {[...bottomImages, ...bottomImages].map((src) => (
+        <li class="flex h-40 shrink-0 items-center sm:h-56 lg:h-72">
+          <img src={src} alt="" class="h-full w-auto" loading="lazy" />
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
