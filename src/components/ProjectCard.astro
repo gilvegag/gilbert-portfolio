@@ -17,6 +17,7 @@ const {
   thumbnailFit,
   thumbnailAspect,
   cardTag,
+  cardDescription,
   cardHighlight,
   cardImpact,
 } = project.data
@@ -84,6 +85,7 @@ const isCoverRight = thumbnailFit === "cover-right"
       <div>
         <Badge variant="secondary">{cardTag}</Badge>
       </div>
+      {cardDescription && <p class="text-sm leading-relaxed text-muted-foreground">{cardDescription}</p>}
     </div>
     <div class="flex flex-col gap-2.5 opacity-60 transition-opacity duration-300 group-hover:opacity-100">
       <div class="flex items-center gap-2.5 text-sm text-foreground">

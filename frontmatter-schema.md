@@ -29,6 +29,7 @@ Required for every project (rich or simple layout):
 | `skills` | string[] | Only rendered by the simple layout (badge row) |
 | `thumbnail` | path | Fallback home-card image if vertical/landscape variants aren't set |
 | `cardTag` | string | Badge on the home card AND the hero tag badge (replaces the old hero paragraph) |
+| `cardDescription` | string, optional | Short blurb on the home card, below the tag badge. Omit for cards that should stay to just title + tag + the three info lines |
 | `cardHighlight` | string | Home card info line (Zap icon) |
 | `cardImpact` | string | Home card info line (TrendingUp icon) |
 | `sortOrder` | number | 1 = first on home page |

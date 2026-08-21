@@ -37,6 +37,7 @@ const projects = defineCollection({
     heroImage: z.string().startsWith("/images/projects/").optional(),
     heroImageRounded: z.boolean().default(true),
     cardTag: z.string(),
+    cardDescription: z.string().optional(),
     cardHighlight: z.string(),
     cardImpact: z.string(),
     // Optional rich case-study layout (hero context, challenges, approach,

@@ -1,10 +1,10 @@
 ---
-title: "Evolving a radiotherapy planning system into web"
+title: "Evolving a radiotherapy system into web"
 description: "Merging two legacy desktop radiotherapy planning systems into one FDA-regulated web platform for Accuray."
 company: "Accuray"
 companyUrl: "https://www.accuray.com/"
 role: "Senior Product Designer"
-industry: "Healthcare · Radiotherapy"
+industry: "Healthtech · Radiotherapy"
 timeframe: "Dec 2022 – Mar 2026"
 skills: ["Complex SaaS Workflows", "Product Discovery", "Accessibility (WCAG)", "UX Research", "Data-Dense UI"]
 thumbnail: "/images/projects/accuray-radiotherapy/accuray_main_thumbnail.png"
@@ -15,7 +15,8 @@ thumbnailAspect: "3840/2148"
 heroImage: "/images/projects/accuray-radiotherapy/hero.png"
 heroImageRounded: false
 heroLogo: "/images/projects/accuray-radiotherapy/logo.png"
-cardTag: "Healthcare"
+cardTag: "Healthtech"
+cardDescription: "Redesigned the software doctors use to update cancer treatments while the patient waits, cutting the update process by 25% and giving clinics back nearly an hour of capacity every day."
 cardHighlight: "2 legacy systems → 1 platform"
 cardImpact: "Presented at ASTRO & ESTRO"
 problem:

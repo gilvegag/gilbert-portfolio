@@ -35,22 +35,41 @@ const skills = [
 >
   <section
     data-reveal-group
-    class="mx-auto flex w-full max-w-[1400px] flex-col gap-10 px-6 py-12 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:px-14 lg:py-20"
+    class="mx-auto flex w-full max-w-[1400px] flex-col gap-8 px-6 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:px-14 lg:py-12"
   >
-    <div class="flex max-w-2xl flex-col gap-6">
+    <div class="flex max-w-2xl flex-col gap-4">
+      <p
+        data-reveal
+        class="text-xs font-medium text-balance tracking-[0.1em] text-muted-foreground uppercase"
+      >
+        Senior Product Designer / Design Engineer for complex Healthtech, Fintech, and Enterprise products
+      </p>
       <h1
         data-reveal
-        class="text-xl leading-snug font-normal tracking-tight text-foreground sm:text-2xl lg:text-3xl"
+        class="text-3xl leading-tight font-bold tracking-tight text-balance text-foreground sm:text-4xl lg:text-4xl"
       >
-        Product designer with over a decade of experience designing complex
-        products and shaping design systems. I work end to end, bring strong
-        visual craft, and know how to close the gap between design and
-        engineering.
+        I design complex product workflows and turn them into clear,
+        shippable systems.
       </h1>
+      <p data-reveal class="text-base leading-normal text-foreground">
+        I help technical teams turn complex or ambiguous problems into
+        scalable products — bridging design intent and frontend
+        implementation, whether that's building zero-to-one or evolving what
+        already exists.
+      </p>
+      <p data-reveal class="text-sm leading-normal text-muted-foreground">
+        Over 12 years in design, working up to senior and lead roles on
+        regulated healthtech and fintech products, where user flows are
+        complex, engineering constraints are real, and someone needs to make
+        the product understandable, usable, and scalable. I started in
+        frontend and visual design before moving into product design, and
+        that foundation still grounds how I think about design and code
+        together.
+      </p>
       <div data-reveal class="flex flex-wrap gap-2">
-        <Badge variant="secondary">Senior Product Designer</Badge>
-        <Badge variant="secondary">12+ years of experience</Badge>
-        <Badge variant="secondary">B2B | SaaS | 0-1</Badge>
+        <Badge variant="secondary">Design systems at scale</Badge>
+        <Badge variant="secondary">Regulated healthtech and fintech</Badge>
+        <Badge variant="secondary">Zero-to-one product design</Badge>
       </div>
     </div>
     <div
@@ -147,7 +166,7 @@ const skills = [
         </div>
       </div>
 
-      <div data-reveal class="w-full min-w-0 lg:flex-1">
+      <div data-reveal class="hidden w-full min-w-0 md:block lg:flex-1">
         <VisualWorkCarousel />
         <p class="mt-3 text-sm text-muted-foreground">Products I've helped build</p>
       </div>
