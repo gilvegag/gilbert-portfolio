@@ -1,4 +1,9 @@
 ---
+// Alternate home layout trial — case study cards laid out image-left/
+// text-right (inspired by lab.auth0.com's experiments list) instead of the
+// 3-column grid on the real home page. Not linked from nav; visit directly
+// to compare. Delete this file (and the "landscape" ProjectCard variant)
+// once a direction is picked, or promote it to replace index.astro.
 import { getCollection } from "astro:content"
 import { Figma, Rocket } from "lucide-react"
 import BaseLayout from "@/layouts/BaseLayout.astro"
@@ -80,13 +85,18 @@ const cardStats: Record<string, { statLine: string; secondaryTag?: string }> = {
     <p class="mb-6 text-xs font-medium tracking-[0.1em] text-muted-foreground uppercase">
       Selected Work
     </p>
-    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+    <div class="flex flex-col gap-4">
       {projects.map((project) => {
         const stat = cardStats[project.slug]
         return stat ? (
-          <ProjectCard project={project} variant="stat" statLine={stat.statLine} secondaryTag={stat.secondaryTag} />
+          <ProjectCard
+            project={project}
+            variant="landscape"
+            statLine={stat.statLine}
+            secondaryTag={stat.secondaryTag}
+          />
         ) : (
-          <ProjectCard project={project} />
+          <ProjectCard project={project} variant="landscape" />
         )
       })}
     </div>

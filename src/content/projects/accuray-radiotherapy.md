@@ -16,7 +16,7 @@ heroImage: "/images/projects/accuray-radiotherapy/hero.png"
 heroImageRounded: false
 heroLogo: "/images/projects/accuray-radiotherapy/logo.png"
 cardTag: "Healthtech"
-cardDescription: "Redesigned the software doctors use to update cancer treatments while the patient waits, cutting the update process by 25% and giving clinics back nearly an hour of capacity every day."
+cardDescription: "Redesigned the software doctors use to update cancer treatments while the patient is on the table, cutting the workflow by 25% and giving clinics back nearly an hour of capacity every day."
 cardHighlight: "2 legacy systems → 1 platform"
 cardImpact: "Presented at ASTRO & ESTRO"
 problem:

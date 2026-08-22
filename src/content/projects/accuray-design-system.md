@@ -1,9 +1,9 @@
 ---
-title: "From Zero to Scale: Building a design system from the ground up"
+title: "Design system from zero, at enterprise scale"
 description: "Building Accuray's first design system from scratch — tokens, components, and AI-assisted documentation for nine satellite products."
 company: "Accuray (via Gorilla Logic)"
 companyUrl: "https://www.accuray.com/"
-role: "Senior Product Designer · Design System Lead"
+role: "Design System Lead"
 industry: "HealthTech · Radiotherapy Planning Software"
 timeframe: "2022 – 2026"
 skills: ["Design Systems at Scale", "Design Tokens", "Storybook", "Accessibility (WCAG)", "AI-Assisted Workflows"]
@@ -15,6 +15,7 @@ thumbnailAspect: "1912/1758"
 heroImage: "/images/projects/accuray-design-system/design-system-thumbnail.png"
 heroLogo: "/images/projects/accuray-design-system/logo.png"
 cardTag: "Design Systems"
+cardDescription: "A healthtech company had no shared foundation and teams were duplicating work, so I pitched, led, and shipped the first design system across the platform, covering 90% of general components in the first year."
 cardHighlight: "Built from scratch"
 cardImpact: "~10 weeks dev time saved"
 problem:
