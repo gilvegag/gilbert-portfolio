@@ -136,14 +136,14 @@ const imageBg = theme ? themeGradient(theme) : undefined
     )}
   </div>
   {isDetail ? (
-    <div class="order-1 flex flex-col gap-4 p-8 lg:w-3/5 lg:justify-center lg:gap-5 lg:p-12">
+    <div class="order-1 flex flex-col gap-4 bg-white p-8 lg:w-3/5 lg:justify-center lg:gap-5 lg:p-12 dark:bg-transparent">
       {heroLogo && (
         <img
           src={heroLogo}
           alt={company}
           class:list={[
             "w-auto self-start object-contain invert dark:invert-0",
-            project.slug === "oatfi" ? "h-6" : "h-4",
+            project.slug === "oatfi" ? "h-5" : "h-3.5",
           ]}
         />
       )}
