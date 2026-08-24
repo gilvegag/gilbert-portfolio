@@ -4,7 +4,7 @@ import { Users, Search, MessageSquare, Star, Linkedin, Copy, ArrowUpRight, X } f
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import CaseStudySection from "@/components/CaseStudySection.astro"
 import { Badge } from "@/components/ui/badge"
-import { projectThemes, themeToCssVars } from "@/data/project-colors"
+import { projectThemes, themeToCssVars, themeGradient } from "@/data/project-colors"
 
 interface Props {
   project: CollectionEntry<"projects">
@@ -34,6 +34,12 @@ const {
 
 const theme = projectThemes[project.slug]
 const heroStyle = theme ? themeToCssVars(theme) : undefined
+// Same soft left-to-right gradient as this project's home page card image,
+// applied to <body> (see BaseLayout's bodyStyle) rather than to the hero/
+// footer sections individually — so it reads as one continuous background
+// behind the header and site footer too, instead of resetting at each
+// section's own box edge.
+const bodyStyle = theme ? { "background-image": themeGradient(theme) } : undefined
 // The content zone between the hero and the impact section sits on the
 // site's normal light/dark surface (so the theme toggle actually affects
 // it), not the brand color. It reads from the --surface-* tokens instead
@@ -82,12 +88,17 @@ const labelClass = "text-xs font-medium tracking-[0.1em] text-muted-foreground u
 const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] md:gap-16"
 ---
 
-<BaseLayout title={`${title} — Gilbert Vega`} description={description} themeVars={heroStyle}>
+<BaseLayout
+  title={`${title} — Gilbert Vega`}
+  description={description}
+  themeVars={heroStyle}
+  bodyStyle={bodyStyle}
+>
   <div id="page-curtain" aria-hidden="true"></div>
   {
     hasRichLayout ? (
       <article>
-        <div id="hero" style={heroStyle} class="w-full bg-background text-foreground">
+        <div id="hero" style={heroStyle} class="w-full text-foreground">
           <div class="mx-auto w-full max-w-5xl px-6 py-6 sm:px-8">
             <a
               href="/#work"
@@ -106,7 +117,7 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
                   ) : (
                     <img src={heroLogo} alt={company} class="mb-2 h-auto max-h-9 w-auto max-w-32 self-start" />
                   ))}
-                <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
+                <h1 class="text-3xl font-semibold text-pretty tracking-tight sm:text-4xl">{title}</h1>
                 {cardTag && (
                   <div>
                     <Badge variant="secondary">{cardTag}</Badge>
@@ -251,7 +262,7 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
         </div>
 
         {(highlights?.length || testimonial || ctaHeading) && (
-          <div style={heroStyle} class="w-full bg-background text-foreground">
+          <div style={heroStyle} class="w-full text-foreground">
             <div data-reveal-group class="mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 py-16 sm:px-8">
               {highlights && highlights.length > 0 && (
                 <div id="impact" data-reveal class={rowClass}>
@@ -457,7 +468,7 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
         </a>
 
         <header class="mt-6 flex flex-col gap-6">
-          <h1 class="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <h1 class="text-3xl font-semibold text-pretty tracking-tight text-foreground sm:text-4xl">
             {title}
           </h1>
           <p class="max-w-2xl text-lg text-muted-foreground">{description}</p>

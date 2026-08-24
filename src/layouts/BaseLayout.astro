@@ -7,11 +7,22 @@ interface Props {
   title: string
   description: string
   themeVars?: Record<string, string>
+  // Applied to <body> instead of a page-section background, so anything
+  // that sits transparent above the normal --background (the header, a
+  // case study's brand-colored hero/footer sections, the site footer)
+  // shows this through continuously instead of each painting its own
+  // separate, seam-prone copy of it. See ProjectLayout.astro.
+  bodyStyle?: Record<string, string>
 }
 
-const { title, description, themeVars } = Astro.props
+const { title, description, themeVars, bodyStyle } = Astro.props
 const themeStyle = themeVars
   ? Object.entries(themeVars)
+      .map(([key, value]) => `${key}:${value}`)
+      .join(";")
+  : undefined
+const bodyStyleStr = bodyStyle
+  ? Object.entries(bodyStyle)
       .map(([key, value]) => `${key}:${value}`)
       .join(";")
   : undefined
@@ -34,7 +45,7 @@ const themeStyle = themeVars
       }
     </script>
   </head>
-  <body>
+  <body style={bodyStyleStr}>
     <div class="flex min-h-screen flex-col">
       <Header />
       <main class="flex-1">

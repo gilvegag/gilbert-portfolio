@@ -8,7 +8,14 @@ import { Figma, Rocket } from "lucide-react"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import ProjectCard from "@/components/ProjectCard.astro"
 import ClientLogoMarquee from "@/components/ClientLogoMarquee.astro"
-import { Badge } from "@/components/ui/badge"
+// Playful hero tags — small emoji pills instead of plain badges, each with
+// its own pastel tone (light/dark aware), inspired by a sticker-style
+// reference layout.
+const heroTags = [
+  { emoji: "🧩", label: "Design systems at scale", color: "bg-emerald-100 text-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200" },
+  { emoji: "🛡️", label: "Regulated healthtech and fintech", color: "bg-orange-100 text-orange-900 dark:bg-orange-950/40 dark:text-orange-200" },
+  { emoji: "🏗️", label: "Zero-to-one Lead UX", color: "bg-violet-100 text-violet-900 dark:bg-violet-950/40 dark:text-violet-200" },
+]
 
 const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
   (a, b) => a.data.sortOrder - b.data.sortOrder
@@ -86,54 +93,63 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
 >
   <section
     data-reveal-group
-    class="mx-auto flex w-full max-w-[1128px] flex-col gap-8 px-6 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-start lg:gap-20 lg:px-14 lg:py-12"
+    class="mx-auto flex w-full max-w-[1128px] flex-col gap-8 px-6 py-8 sm:px-8 lg:px-14 lg:py-12"
   >
-    <div
-      data-reveal
-      class="w-40 shrink-0 self-center overflow-hidden rounded-xl ring-1 ring-foreground/10 lg:w-56 lg:self-auto xl:w-64"
-    >
-      <img
-        src="/images/home/profilenew.png"
-        alt="Gilbert Vega"
-        class="aspect-[4/5] w-full object-cover"
-      />
-    </div>
-    <div class="flex max-w-4xl flex-col gap-4">
-      <p
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-start lg:gap-20">
+      <div
         data-reveal
-        class="text-xs font-medium text-balance tracking-[0.1em] text-muted-foreground uppercase"
+        class="w-40 shrink-0 self-center overflow-hidden rounded-xl ring-1 ring-foreground/10 lg:w-56 lg:self-auto xl:w-64"
       >
-        Senior Product Designer / Design Engineer
-      </p>
-      <h1
-        data-reveal
-        class="text-3xl leading-tight font-medium tracking-tight text-balance text-foreground sm:text-4xl lg:text-4xl"
-      >
-        I design complex product workflows
-        <br class="hidden lg:block" />
-        and turn them into clear, shippable systems.
-      </h1>
-      <p data-reveal class="max-w-[70ch] text-base leading-normal text-pretty text-foreground">
-        I help technical teams turn complex or ambiguous problems into
-        scalable products, bridging design intent and frontend
-        implementation, whether that's building zero-to-one or evolving what
-        already exists.
-      </p>
-      <p data-reveal class="max-w-[62ch] text-sm leading-normal text-pretty text-muted-foreground">
-        Over 12 years in design, working up to senior and lead roles on
-        regulated healthtech and fintech platforms, where user flows are
-        complex, engineering constraints are real, and someone needs to make
-        it understandable, usable, and scalable. I started in frontend and
-        visual design before moving into product design, and that foundation
-        still grounds how I think about design and code together.
-      </p>
-      <div data-reveal class="mt-2 flex flex-wrap gap-3">
-        <Badge variant="secondary">Design systems at scale</Badge>
-        <Badge variant="secondary">Regulated healthtech and fintech</Badge>
-        <Badge variant="secondary">Zero-to-one Lead UX</Badge>
+        <img
+          src="/images/home/profilenew.png"
+          alt="Gilbert Vega"
+          class="aspect-[4/5] w-full object-cover"
+        />
       </div>
-      <div data-reveal class="mt-2 w-full min-w-0">
-        <ClientLogoMarquee />
+      <div class="flex min-w-0 max-w-4xl flex-col gap-4">
+        <p
+          data-reveal
+          class="text-xs font-medium text-balance tracking-[0.1em] text-muted-foreground uppercase"
+        >
+          Senior Product Designer / Design Engineer
+        </p>
+        <h1
+          data-reveal
+          class="text-3xl leading-tight font-medium tracking-tight text-pretty text-foreground sm:text-4xl lg:text-4xl"
+        >
+          I design complex product workflows and turn them into clear,
+          shippable&nbsp;systems.
+        </h1>
+        <p data-reveal class="max-w-[70ch] text-base leading-normal text-pretty text-foreground">
+          I help technical teams turn complex or ambiguous problems into
+          scalable products, bridging design intent and frontend
+          implementation, whether that's building zero-to-one or evolving what
+          already exists.
+        </p>
+        <p data-reveal class="max-w-[62ch] text-sm leading-normal text-pretty text-muted-foreground">
+          Over 12 years in design, working up to senior and lead roles on
+          regulated healthtech and fintech platforms, where user flows are
+          complex, engineering constraints are real, and someone needs to make
+          it understandable, usable, and scalable. I started in frontend and
+          visual design before moving into product design, and that foundation
+          still grounds how I think about design and code together.
+        </p>
+        <div data-reveal class="mt-2 flex flex-wrap gap-3">
+          {heroTags.map((tag) => (
+            <span
+              class:list={[
+                "inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium",
+                tag.color,
+              ]}
+            >
+              <span aria-hidden="true">{tag.emoji}</span>
+              {tag.label}
+            </span>
+          ))}
+        </div>
+        <div data-reveal class="w-full min-w-0 overflow-hidden pt-8 lg:pt-10">
+          <ClientLogoMarquee />
+        </div>
       </div>
     </div>
   </section>

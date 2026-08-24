@@ -24,7 +24,7 @@ const logos = [
   <ul data-marquee class="logo-marquee-track flex w-max items-center gap-10">
     {[...logos, ...logos].map((logo) => (
       <li class:list={["flex shrink-0 items-center", logo.heightClass]}>
-        <img src={logo.src} alt={logo.alt} class="h-full w-auto object-contain opacity-45 grayscale" loading="lazy" />
+        <img src={logo.src} alt={logo.alt} class="h-full w-auto object-contain opacity-45 grayscale invert dark:invert-0" loading="lazy" />
       </li>
     ))}
   </ul>
