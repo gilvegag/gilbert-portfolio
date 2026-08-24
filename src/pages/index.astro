@@ -1,8 +1,13 @@
 ---
+// Stacking-cards home layout — case study cards laid out image-left/
+// text-right with a sticky scroll-stack (inspired by athos.framer.website),
+// replacing the original 3-column grid. See src/pages/home-grid.astro for
+// the archived grid version.
 import { getCollection } from "astro:content"
 import { Figma, Rocket } from "lucide-react"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import ProjectCard from "@/components/ProjectCard.astro"
+import ClientLogoMarquee from "@/components/ClientLogoMarquee.astro"
 import { Badge } from "@/components/ui/badge"
 
 const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
@@ -14,6 +19,65 @@ const cardStats: Record<string, { statLine: string; secondaryTag?: string }> = {
   oatfi: { statLine: "10+ deals closed", secondaryTag: "Fintech · 0→1 product" },
   "accuray-design-system": { statLine: "90% coverage" },
 }
+
+// Text-left/image-right "detail" card format — see the "detail" variant
+// note on ProjectCard.astro. Scoped per-project here.
+const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
+  "accuray-design-system": [
+    {
+      label: "Challenge & context",
+      text: "No shared design foundation. Three designers, one file, no components, no documentation.",
+    },
+    {
+      label: "Role & scope",
+      text: "Pitched it, won the buy in, led it solo for two years.",
+    },
+    {
+      label: "What I led",
+      text: "Built tokens, components, and an AI assisted documentation pipeline, paired with engineering through Storybook.",
+    },
+    {
+      label: "Impact & evidence",
+      text: "90% component coverage, 2 products adopted, ~1,600 hours saved in the first quarter.",
+    },
+  ],
+  oatfi: [
+    {
+      label: "Challenge & context",
+      text: "A lending product that only existed in code, invisible outside engineering.",
+    },
+    {
+      label: "Role & scope",
+      text: "Sole product designer for 15 months, working directly with the CEO, CTO and PM.",
+    },
+    {
+      label: "What I led",
+      text: "Set the direction for three connected experiences on one shared foundation, not a single tool with permission toggles.",
+    },
+    {
+      label: "Impact & evidence",
+      text: "More than 10 enterprise partners closed with no engineer in the room, team fully self sufficient.",
+    },
+  ],
+  "accuray-radiotherapy": [
+    {
+      label: "Challenge & context",
+      text: "Two legacy radiotherapy systems, stitched together, felt like separate products.",
+    },
+    {
+      label: "Role & scope",
+      text: "Only product designer for 4 years, working with a usability lead, SMEs, and full stack devs.",
+    },
+    {
+      label: "What I led",
+      text: "Redesigned clinical workflows into one consistent UI, rebuilt the main clinician screen, fixed error handling.",
+    },
+    {
+      label: "Impact & evidence",
+      text: "25% faster updates, ~50 min/day of capacity returned, 100% error recovery in testing.",
+    },
+  ],
+}
 ---
 
 <BaseLayout
@@ -22,7 +86,7 @@ const cardStats: Record<string, { statLine: string; secondaryTag?: string }> = {
 >
   <section
     data-reveal-group
-    class="mx-auto flex w-full max-w-[1400px] flex-col gap-8 px-6 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-start lg:gap-20 lg:px-14 lg:py-12"
+    class="mx-auto flex w-full max-w-[1128px] flex-col gap-8 px-6 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-start lg:gap-20 lg:px-14 lg:py-12"
   >
     <div
       data-reveal
@@ -55,19 +119,21 @@ const cardStats: Record<string, { statLine: string; secondaryTag?: string }> = {
         implementation, whether that's building zero-to-one or evolving what
         already exists.
       </p>
-      <p data-reveal class="max-w-[75ch] text-sm leading-normal text-pretty text-muted-foreground">
+      <p data-reveal class="max-w-[62ch] text-sm leading-normal text-pretty text-muted-foreground">
         Over 12 years in design, working up to senior and lead roles on
-        regulated healthtech and fintech products, where user flows are
+        regulated healthtech and fintech platforms, where user flows are
         complex, engineering constraints are real, and someone needs to make
-        the product understandable, usable, and scalable. I started in
-        frontend and visual design before moving into product design, and
-        that foundation still grounds how I think about design and code
-        together.
+        it understandable, usable, and scalable. I started in frontend and
+        visual design before moving into product design, and that foundation
+        still grounds how I think about design and code together.
       </p>
-      <div data-reveal class="flex flex-wrap gap-2">
+      <div data-reveal class="mt-2 flex flex-wrap gap-3">
         <Badge variant="secondary">Design systems at scale</Badge>
         <Badge variant="secondary">Regulated healthtech and fintech</Badge>
         <Badge variant="secondary">Zero-to-one Lead UX</Badge>
+      </div>
+      <div data-reveal class="mt-2 w-full min-w-0">
+        <ClientLogoMarquee />
       </div>
     </div>
   </section>
@@ -75,24 +141,37 @@ const cardStats: Record<string, { statLine: string; secondaryTag?: string }> = {
   <section
     id="work"
     data-reveal-group
-    class="mx-auto w-full max-w-[1400px] px-6 pt-8 pb-24 sm:px-8 lg:px-14 lg:pt-16"
+    class="mx-auto w-full max-w-[1128px] px-6 pt-8 pb-24 sm:px-8 lg:px-14 lg:pt-16"
   >
     <p class="mb-6 text-xs font-medium tracking-[0.1em] text-muted-foreground uppercase">
       Selected Work
     </p>
-    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-      {projects.map((project) => {
+    <div class="flex flex-col gap-12">
+      {projects.map((project, i) => {
+        const stickyStyle = { position: "sticky", top: `${100 + i * 40}px`, zIndex: i + 1 }
         const stat = cardStats[project.slug]
-        return stat ? (
-          <ProjectCard project={project} variant="stat" statLine={stat.statLine} secondaryTag={stat.secondaryTag} />
-        ) : (
-          <ProjectCard project={project} />
+        const rows = detailRowsBySlug[project.slug]
+        return (
+          <div style={stickyStyle}>
+            {rows ? (
+              <ProjectCard project={project} variant="detail" rows={rows} statLine={stat?.statLine} />
+            ) : stat ? (
+              <ProjectCard
+                project={project}
+                variant="landscape"
+                statLine={stat.statLine}
+                secondaryTag={stat.secondaryTag}
+              />
+            ) : (
+              <ProjectCard project={project} variant="landscape" />
+            )}
+          </div>
         )
       })}
     </div>
   </section>
 
-  <section class="mx-auto w-full max-w-[1400px] px-6 pb-16 sm:px-8 lg:px-14">
+  <section class="mx-auto w-full max-w-[1128px] px-6 pb-16 sm:px-8 lg:px-14">
     <div
       data-reveal
       class="flex flex-col items-center gap-8 border-t border-border pt-12 text-center"

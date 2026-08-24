@@ -1,14 +1,12 @@
 ---
-// Alternate home layout trial — case study cards laid out image-left/
-// text-right (inspired by lab.auth0.com's experiments list) instead of the
-// 3-column grid on the real home page. Not linked from nav; visit directly
-// to compare. Delete this file (and the "landscape" ProjectCard variant)
-// once a direction is picked, or promote it to replace index.astro.
+// Archived home layout — the original 3-column card grid, kept for
+// reference after the stacking-cards layout replaced it on "/". Not linked
+// from nav; visit directly to compare.
 import { getCollection } from "astro:content"
 import { Figma, Rocket } from "lucide-react"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import ProjectCard from "@/components/ProjectCard.astro"
-import { Badge } from "@/components/ui/badge"
+import ClientLogoMarquee from "@/components/ClientLogoMarquee.astro"
 
 const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
   (a, b) => a.data.sortOrder - b.data.sortOrder
@@ -27,52 +25,64 @@ const cardStats: Record<string, { statLine: string; secondaryTag?: string }> = {
 >
   <section
     data-reveal-group
-    class="mx-auto flex w-full max-w-[1400px] flex-col gap-8 px-6 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-start lg:gap-20 lg:px-14 lg:py-12"
+    class="mx-auto w-full max-w-[1400px] px-6 py-8 sm:px-8 lg:px-14 lg:py-12"
   >
-    <div
+    <p
       data-reveal
-      class="w-40 shrink-0 self-center overflow-hidden rounded-xl ring-1 ring-foreground/10 lg:w-56 lg:self-auto xl:w-64"
+      class="text-xs font-medium text-balance tracking-[0.1em] text-muted-foreground uppercase"
     >
-      <img
-        src="/images/home/profilenew.png"
-        alt="Gilbert Vega"
-        class="aspect-[4/5] w-full object-cover"
-      />
-    </div>
-    <div class="flex max-w-4xl flex-col gap-4">
-      <p
+      Senior Product Designer / Design Engineer
+    </p>
+    <h1
+      data-reveal
+      class="mt-4 text-3xl leading-tight font-medium tracking-tight text-balance text-foreground sm:text-4xl lg:text-4xl"
+    >
+      I design complex product workflows
+      <br class="hidden lg:block" />
+      and turn them into clear, shippable systems.
+    </h1>
+
+    <div class="mt-8 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
+      <div
         data-reveal
-        class="text-xs font-medium text-balance tracking-[0.1em] text-muted-foreground uppercase"
+        class="w-40 shrink-0 self-center overflow-hidden rounded-xl ring-1 ring-foreground/10 lg:w-56 lg:self-auto xl:w-64"
       >
-        Senior Product Designer / Design Engineer
-      </p>
-      <h1
-        data-reveal
-        class="text-3xl leading-tight font-medium tracking-tight text-balance text-foreground sm:text-4xl lg:text-4xl"
-      >
-        I design complex product workflows
-        <br class="hidden lg:block" />
-        and turn them into clear, shippable systems.
-      </h1>
-      <p data-reveal class="max-w-[70ch] text-base leading-normal text-pretty text-foreground">
-        I help technical teams turn complex or ambiguous problems into
-        scalable products, bridging design intent and frontend
-        implementation, whether that's building zero-to-one or evolving what
-        already exists.
-      </p>
-      <p data-reveal class="max-w-[75ch] text-sm leading-normal text-pretty text-muted-foreground">
-        Over 12 years in design, working up to senior and lead roles on
-        regulated healthtech and fintech products, where user flows are
-        complex, engineering constraints are real, and someone needs to make
-        the product understandable, usable, and scalable. I started in
-        frontend and visual design before moving into product design, and
-        that foundation still grounds how I think about design and code
-        together.
-      </p>
-      <div data-reveal class="flex flex-wrap gap-2">
-        <Badge variant="secondary">Design systems at scale</Badge>
-        <Badge variant="secondary">Regulated healthtech and fintech</Badge>
-        <Badge variant="secondary">Zero-to-one Lead UX</Badge>
+        <img
+          src="/images/home/profilenew.png"
+          alt="Gilbert Vega"
+          class="aspect-[4/5] w-full object-cover"
+        />
+      </div>
+
+      <div class="flex w-full flex-col gap-4 lg:flex-1">
+        <p data-reveal class="text-base leading-normal text-pretty text-foreground">
+          I help technical teams turn complex or ambiguous problems into
+          scalable products, bridging design intent and frontend
+          implementation, whether that's building zero-to-one or evolving what
+          already exists.
+        </p>
+        <p data-reveal class="text-sm leading-normal text-pretty text-muted-foreground">
+          Over 12 years in design, working up to senior and lead roles on
+          regulated healthtech and fintech platforms, where user flows are
+          complex, engineering constraints are real, and someone needs to make
+          it understandable, usable, and scalable. I started in frontend and
+          visual design before moving into product design, and that foundation
+          still grounds how I think about design and code together.
+        </p>
+      </div>
+
+      <div data-reveal class="flex w-full min-w-0 flex-col gap-10 border-t border-border pt-6 lg:ml-8 lg:flex-1 lg:border-t-0 lg:pt-0">
+        <div class="flex flex-col divide-y divide-border">
+          <p class="py-3 text-sm font-medium text-foreground first:pt-0">Design systems at scale</p>
+          <p class="py-3 text-sm font-medium text-foreground">Regulated healthtech and fintech</p>
+          <p class="py-3 text-sm font-medium text-foreground last:pb-0">Zero-to-one Lead UX</p>
+        </div>
+        <div>
+          <p class="mb-6 text-xs font-medium tracking-[0.1em] text-muted-foreground uppercase">
+            Worked with
+          </p>
+          <ClientLogoMarquee />
+        </div>
       </div>
     </div>
   </section>
@@ -85,18 +95,13 @@ const cardStats: Record<string, { statLine: string; secondaryTag?: string }> = {
     <p class="mb-6 text-xs font-medium tracking-[0.1em] text-muted-foreground uppercase">
       Selected Work
     </p>
-    <div class="flex flex-col gap-4">
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
       {projects.map((project) => {
         const stat = cardStats[project.slug]
         return stat ? (
-          <ProjectCard
-            project={project}
-            variant="landscape"
-            statLine={stat.statLine}
-            secondaryTag={stat.secondaryTag}
-          />
+          <ProjectCard project={project} variant="stat" statLine={stat.statLine} secondaryTag={stat.secondaryTag} />
         ) : (
-          <ProjectCard project={project} variant="landscape" />
+          <ProjectCard project={project} />
         )
       })}
     </div>

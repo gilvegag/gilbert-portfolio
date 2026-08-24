@@ -1,0 +1,40 @@
+---
+// Small infinite-scroll client logo strip, modeled on kaancaglar.design's
+// hero logo marquee: grayscale + low opacity so every logo reads as one
+// consistent muted tone regardless of its source color, paused on hover.
+// Same duplicate-the-list-once-and-animate-to--50% technique already used
+// by CommunityPillsMarquee/PptCarousel — the two copies must stay
+// identical for the loop to be seamless.
+// Heights are tuned per logo, not uniform — a wordmark as wide/thin as
+// Accuray's or an icon as square as LegalShield's needs a different pixel
+// height to *read* the same visual size as OatFi/Verizon at h-6.
+const logos = [
+  { src: "/images/projects/accuray-radiotherapy/logo.png", alt: "Accuray", heightClass: "h-3.5" },
+  { src: "/images/projects/oatfi/logo.png", alt: "OatFi", heightClass: "h-6" },
+  { src: "/images/home/verizon.png", alt: "Verizon", heightClass: "h-6" },
+  { src: "/images/home/legalshield.svg", alt: "LegalShield", heightClass: "h-7" },
+  { src: "/images/home/associa.svg", alt: "Associa", heightClass: "h-6" },
+]
+---
+
+<div
+  class="group relative w-full min-w-0 overflow-hidden"
+  style="mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);"
+>
+  <ul data-marquee class="logo-marquee-track flex w-max items-center gap-10">
+    {[...logos, ...logos].map((logo) => (
+      <li class:list={["flex shrink-0 items-center", logo.heightClass]}>
+        <img src={logo.src} alt={logo.alt} class="h-full w-auto object-contain opacity-45 grayscale" loading="lazy" />
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .logo-marquee-track {
+    animation: marquee-left 32s linear infinite;
+  }
+  .group:hover .logo-marquee-track {
+    animation-play-state: paused;
+  }
+</style>

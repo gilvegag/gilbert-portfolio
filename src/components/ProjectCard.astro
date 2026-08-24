@@ -5,17 +5,20 @@ import { Badge } from "@/components/ui/badge"
 
 interface Props {
   project: CollectionEntry<"projects">
-  // Experiment: "stat" trades the tag badge for a prominent highlighted
-  // stat line and drops to two icon rows. "landscape" reuses that same
-  // content but laid out image-left/text-right instead of stacked, for the
-  // /home-landscape trial layout. Both scoped by whoever renders them for
-  // now — promote to a frontmatter-driven layout choice once validated.
-  variant?: "grid" | "stat" | "landscape"
+  // "stat" trades the tag badge for a prominent highlighted stat line and
+  // drops to two icon rows. "landscape" reuses that same content but laid
+  // out image-left/text-right instead of stacked — used on the home page's
+  // stacking-cards section. "detail" is a text-left/image-right format
+  // with a labeled Q&A-style row list instead of the stat content, used
+  // for all 3 home page cards. All scoped by whoever renders them —
+  // promote to a frontmatter-driven layout choice once validated.
+  variant?: "grid" | "stat" | "landscape" | "detail"
   statLine?: string
   secondaryTag?: string
+  rows?: { label: string; text: string }[]
 }
 
-const { project, variant = "grid", statLine, secondaryTag } = Astro.props
+const { project, variant = "grid", statLine, secondaryTag, rows } = Astro.props
 const {
   title,
   role,
@@ -30,8 +33,9 @@ const {
   cardImpact,
 } = project.data
 
-const isLandscape = variant === "landscape"
-const isStat = variant === "stat" || isLandscape
+const isDetail = variant === "detail"
+const isLandscape = variant === "landscape" || isDetail
+const isStat = variant === "stat" || (isLandscape && !isDetail)
 
 const mobileImg = thumbnailLandscape ?? thumbnail
 const desktopImg = thumbnailVertical ?? thumbnail
@@ -43,10 +47,16 @@ const isCoverRight = thumbnailFit === "cover-right"
   data-reveal
   class:list={[
     "group flex flex-col overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10 transition-colors hover:ring-foreground/20",
-    isLandscape && "lg:flex-row",
+    isLandscape && "lg:w-full lg:flex-row",
   ]}
 >
-  <div class:list={["w-full overflow-hidden bg-muted", isLandscape && "lg:w-2/5 lg:shrink-0"]}>
+  <div
+    class:list={[
+      "w-full overflow-hidden bg-muted",
+      isLandscape && "lg:w-2/5 lg:shrink-0",
+      isDetail && "lg:order-2",
+    ]}
+  >
     {isCoverRight ? (
       <>
         {/* Mobile: crop anchored top-left, breathing room on top/left */}
@@ -59,12 +69,7 @@ const isCoverRight = thumbnailFit === "cover-right"
           />
         </div>
         {/* Desktop: square frame (matches card height across the grid), crop anchored left, breathing room on top/left/bottom */}
-        <div
-          class:list={[
-            "hidden aspect-square w-full overflow-hidden pt-10 pb-10 pl-10 md:block",
-            isLandscape && "lg:aspect-auto lg:h-full lg:pt-6 lg:pb-6 lg:pl-6",
-          ]}
-        >
+        <div class="hidden aspect-square w-full overflow-hidden pt-10 pb-10 pl-10 md:block">
           <img
             src={desktopImg}
             alt={title}
@@ -87,12 +92,7 @@ const isCoverRight = thumbnailFit === "cover-right"
           </div>
         </div>
         {/* Desktop: square frame (matches card height across the grid), image touches the bottom */}
-        <div
-          class:list={[
-            "hidden aspect-square w-full overflow-hidden px-6 pt-6 md:block",
-            isLandscape && "lg:aspect-auto lg:h-full lg:p-6",
-          ]}
-        >
+        <div class="hidden aspect-square w-full overflow-hidden px-6 pt-6 md:block">
           <img
             src={desktopImg}
             alt={title}
@@ -103,16 +103,29 @@ const isCoverRight = thumbnailFit === "cover-right"
       </>
     )}
   </div>
-  {isStat ? (
-    <div class:list={["flex flex-col gap-3 p-6", isLandscape && "lg:w-3/5 lg:justify-center lg:gap-4 lg:p-8"]}>
-      <h3 class:list={["font-medium text-foreground", isLandscape ? "text-lg" : "text-xl"]}>{title}</h3>
+  {isDetail ? (
+    <div class="flex flex-col gap-4 p-6 lg:order-1 lg:w-3/5 lg:justify-center lg:gap-5 lg:p-8">
+      <h3 class="text-3xl font-medium tracking-tight text-foreground">{title}</h3>
       {statLine && (
-        <div
-          class:list={[
-            "flex items-center gap-2 font-medium text-blue-600 dark:text-blue-400",
-            isLandscape ? "text-sm" : "text-base",
-          ]}
-        >
+        <div class="flex items-center gap-2 text-base font-medium text-blue-600 dark:text-blue-400">
+          <TrendingUp className="size-4 shrink-0" />
+          <span>{statLine}</span>
+        </div>
+      )}
+      <div class="flex flex-col divide-y divide-border">
+        {rows?.map((row) => (
+          <div class="grid grid-cols-1 gap-1 py-3 first:pt-0 last:pb-0 sm:grid-cols-[160px_1fr] sm:gap-6">
+            <p class="text-sm font-semibold text-foreground">{row.label}</p>
+            <p class="text-sm leading-relaxed text-muted-foreground">{row.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  ) : isStat ? (
+    <div class:list={["flex flex-col gap-3 p-6", isLandscape && "lg:w-3/5 lg:justify-center"]}>
+      <h3 class="text-xl font-medium text-foreground">{title}</h3>
+      {statLine && (
+        <div class="flex items-center gap-2 text-base font-medium text-blue-600 dark:text-blue-400">
           <TrendingUp className="size-4 shrink-0" />
           <span>{statLine}</span>
         </div>
