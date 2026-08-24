@@ -164,11 +164,14 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
     </p>
     <div class="flex flex-col gap-12">
       {projects.map((project, i) => {
-        const stickyStyle = { position: "sticky", top: `${100 + i * 40}px`, zIndex: i + 1 }
+        // Sticky scroll-stack only above lg — on phones the sticky
+        // positioning made the cards overlap/jump awkwardly, so they just
+        // stack normally in flow there instead.
+        const cardVars = { "--card-top": `${100 + i * 40}px`, "--card-z": `${i + 1}` }
         const stat = cardStats[project.slug]
         const rows = detailRowsBySlug[project.slug]
         return (
-          <div style={stickyStyle}>
+          <div class="static lg:sticky lg:top-[var(--card-top)] lg:z-[var(--card-z)]" style={cardVars}>
             {rows ? (
               <ProjectCard project={project} variant="detail" rows={rows} statLine={stat?.statLine} />
             ) : stat ? (
