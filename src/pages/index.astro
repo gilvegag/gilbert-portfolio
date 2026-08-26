@@ -236,8 +236,8 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
           data-reveal
           class:list={["testimonial-card mb-5 flex break-inside-avoid flex-col gap-6 rounded-xl bg-card p-6", i % 2 === 1 && "testimonial-card-alt"]}
         >
-          <div class="flex flex-col gap-1">
-            <span class="font-serif text-5xl leading-none font-bold text-muted-foreground/40" aria-hidden="true">
+          <div class="flex flex-col">
+            <span class="-mb-2 text-6xl leading-none font-black text-muted-foreground/40" aria-hidden="true">
               &ldquo;
             </span>
             <p class="text-lg leading-relaxed text-foreground">{t.quote}</p>
