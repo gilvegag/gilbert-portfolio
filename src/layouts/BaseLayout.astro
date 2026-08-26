@@ -39,8 +39,13 @@ const bodyStyleStr = bodyStyle
     <link rel="icon" type="image/svg+xml" href="/images/home/favicon.svg" />
     <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id="7a902904-12ab-4d1c-a660-90a414e60eee"></script>
     <script is:inline>
+      // No stored preference yet — defer to the OS/browser setting instead
+      // of always defaulting to dark. Once the toggle is used, the stored
+      // value always wins over prefers-color-scheme from then on.
       const stored = localStorage.getItem("theme");
-      if (stored === "light") {
+      const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+      const isLight = stored ? stored === "light" : prefersLight;
+      if (isLight) {
         document.documentElement.classList.remove("dark");
       }
     </script>
