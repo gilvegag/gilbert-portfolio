@@ -12,12 +12,18 @@
 // browser can reserve the right aspect ratio before the image loads (no
 // layout shift, which was making the marquee visibly jump as images
 // loaded in). heightClass still governs the actual rendered size.
+// nudgeUp corrects an optical alignment issue: OatFi's and Verizon's
+// bounding boxes are geometrically centered (confirmed), but their glyphs'
+// visual weight sits low in the box, reading as sitting lower than the
+// rest of the row — a couple px upward nudge compensates.
 const logos = [
   { src: "/images/projects/accuray-radiotherapy/logo.png", alt: "Accuray", heightClass: "h-3.5", width: 990, height: 120 },
-  { src: "/images/projects/oatfi/logo.png", alt: "OatFi", heightClass: "h-6", width: 677, height: 240 },
-  { src: "/images/home/verizon.png", alt: "Verizon", heightClass: "h-6", width: 1227, height: 272 },
+  { src: "/images/projects/oatfi/logo.png", alt: "OatFi", heightClass: "h-6", width: 677, height: 240, nudgeUp: 2 },
+  { src: "/images/home/verizon.png", alt: "Verizon", heightClass: "h-6", width: 1227, height: 272, nudgeUp: 2 },
   { src: "/images/home/legalshield.svg", alt: "LegalShield", heightClass: "h-7", width: 620, height: 138 },
   { src: "/images/home/associa.svg", alt: "Associa", heightClass: "h-6", width: 210, height: 49 },
+  { src: "/images/home/therapp.svg", alt: "Therapp", heightClass: "h-6", width: 182, height: 46 },
+  { src: "/images/home/academia.svg", alt: "Academia", heightClass: "h-6", width: 236, height: 31 },
 ]
 ---
 
@@ -33,6 +39,7 @@ const logos = [
           alt={logo.alt}
           width={logo.width}
           height={logo.height}
+          style={logo.nudgeUp ? { transform: `translateY(-${logo.nudgeUp}px)` } : undefined}
           class="h-full w-auto object-contain opacity-45 grayscale invert dark:invert-0"
         />
       </li>
