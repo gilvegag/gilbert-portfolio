@@ -23,8 +23,9 @@ const heroTags = [
 const testimonials = [
   {
     quote:
-      "Gil took dense, sensitive financial data and found a structure that didn't sacrifice accuracy for simplicity. Most people can't pull that off.",
+      "Gil took dense, sensitive financial data and found a structure that didn't sacrifice accuracy for simplicity. Setting clear design standards across the product.",
     author: "Paola Calderón",
+    role: "Product Manager",
     company: "OatFi",
     avatar: "/images/projects/oatfi/paola.png",
     linkedin: "https://www.linkedin.com/in/paola-calder%C3%B3n-g%C3%B3mez-2802566a/",
@@ -33,6 +34,7 @@ const testimonials = [
     quote:
       "He turns complexity into clarity. He asks the right questions, surfaces edge cases early, and aligns stakeholders fast. He raised the bar for our UX practice.",
     author: "Cristina Negrut",
+    role: "Staff Engineer, Usability and UX Lead",
     company: "Accuray",
     avatar: "/images/projects/accuray-radiotherapy/cristina.jpeg",
     linkedin: "https://www.linkedin.com/in/cristina-negrut-30b7511/",
@@ -41,6 +43,7 @@ const testimonials = [
     quote:
       "He understood our brand deeply and quickly. He's precise, proactive with suggestions, and incredibly easy to collaborate with. The most effective designer I've worked with.",
     author: "Ronald Maltés",
+    role: "Founder",
     company: "Therapp",
     avatar: "/images/home/ronald.jpeg",
     linkedin: "https://www.linkedin.com/in/ronaldmaltes/",
@@ -230,15 +233,17 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
     <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
       {testimonials.map((t) => (
         <div data-reveal class="flex flex-col gap-6 rounded-xl bg-card p-6">
-          <span class="font-serif text-4xl leading-none text-muted-foreground/40" aria-hidden="true">
-            &ldquo;
-          </span>
-          <p class="text-base leading-relaxed text-foreground">{t.quote}</p>
+          <div class="flex flex-col gap-1">
+            <span class="font-serif text-5xl leading-none font-bold text-muted-foreground/40" aria-hidden="true">
+              &ldquo;
+            </span>
+            <p class="text-lg leading-relaxed text-foreground">{t.quote}</p>
+          </div>
           <div class="mt-auto flex items-center gap-3">
             {t.avatar && (
               <img src={t.avatar} alt={t.author} class="size-9 rounded-full object-cover" />
             )}
-            <p class="text-sm">
+            <div class="text-sm">
               {t.linkedin ? (
                 <a
                   href={t.linkedin}
@@ -250,9 +255,9 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
                 </a>
               ) : (
                 <span class="font-medium text-foreground">{t.author}</span>
-              )}{" "}
-              <span class="text-muted-foreground">{t.company}</span>
-            </p>
+              )}
+              <p class="text-muted-foreground">{t.role}, {t.company}</p>
+            </div>
           </div>
         </div>
       ))}
