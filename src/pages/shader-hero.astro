@@ -1,0 +1,41 @@
+---
+// Experiment: try a "faded dither" WebGL hover shader (inspired by
+// shaders.com/collection/faded-dither) behind the hero's transparent
+// cutout photo, replacing the flat muted background. Not linked from
+// nav — visit directly to compare against the real home hero.
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import DitherHoverPhoto from "@/components/DitherHoverPhoto.astro"
+---
+
+<BaseLayout
+  title="Shader hero experiment — Gilbert Vega"
+  description="Trying a hover dither shader behind the hero photo."
+>
+  <section class="mx-auto w-full max-w-[1128px] px-6 py-8 sm:px-8 lg:px-14 lg:py-12">
+    <p class="mb-8 text-xs font-medium tracking-[0.1em] text-muted-foreground uppercase">
+      Shader hero experiment — hover the photo
+    </p>
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-start lg:gap-20">
+      <DitherHoverPhoto
+        src="/images/home/shadertrans.png"
+        alt="Gilbert Vega"
+        class="w-40 shrink-0 self-center lg:w-56 lg:self-auto xl:w-64"
+      />
+      <div class="flex min-w-0 max-w-4xl flex-col gap-4">
+        <p class="text-xs font-medium text-balance tracking-[0.1em] text-muted-foreground uppercase">
+          Senior Product Designer / Design Engineer
+        </p>
+        <h1 class="text-3xl leading-tight font-medium tracking-tight text-balance text-foreground sm:text-4xl lg:text-4xl">
+          I design complex product workflows and turn them into clear,
+          shippable&nbsp;systems.
+        </h1>
+        <p class="max-w-[70ch] text-base leading-normal text-pretty text-foreground">
+          I help technical teams turn complex or ambiguous problems into
+          scalable products, bridging design intent and frontend
+          implementation, whether that's building zero-to-one or evolving what
+          already exists.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

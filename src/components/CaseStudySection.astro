@@ -27,6 +27,7 @@ const {
 } = Astro.props
 const allImages = images ?? (image ? [image] : [])
 const hasImages = allImages.length > 0
+const hasVisual = Boolean(visual) || hasImages
 // When a section has more than one image, the text column stays pinned
 // (desktop only) while the taller image stack scrolls past it, then
 // scrolling continues normally into whatever comes next.
@@ -37,12 +38,14 @@ const isScrollStack = allImages.length > 1
   <div
     class:list={[
       "gap-8",
-      imagePosition === "right"
-        ? [
-            "grid grid-cols-1 md:grid-cols-2",
-            isScrollStack ? "md:items-start" : "md:items-center",
-          ]
-        : "flex flex-col",
+      !hasVisual
+        ? "flex flex-col"
+        : imagePosition === "right"
+          ? [
+              "grid grid-cols-1 md:grid-cols-2",
+              isScrollStack ? "md:items-start" : "md:items-center",
+            ]
+          : "flex flex-col",
     ]}
   >
     <div
@@ -77,11 +80,7 @@ const isScrollStack = allImages.length > 1
             </div>
           ))}
         </div>
-      ) : (
-        <div class="flex aspect-video items-center justify-center rounded-lg border border-dashed border-border bg-muted/40 text-xs text-muted-foreground">
-          Image coming soon
-        </div>
-      )
+      ) : null
     }
   </div>
   {beforeAfter && (

@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content"
-import { Users, Search, MessageSquare, Star, Linkedin, Copy, ArrowUpRight, X } from "lucide-react"
+import { Users, Search, MessageSquare, Star, Lock, Linkedin, Copy, ArrowUpRight, X } from "lucide-react"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import CaseStudySection from "@/components/CaseStudySection.astro"
 import { Badge } from "@/components/ui/badge"
@@ -28,8 +28,13 @@ const {
   approachItems,
   solutionSections,
   highlights,
+  highlightGroups,
   testimonial,
   ctaHeading,
+  problemLabel,
+  approachLabel,
+  solutionsLabel,
+  impactLabel,
 } = project.data
 
 const theme = projectThemes[project.slug]
@@ -61,20 +66,21 @@ const hasRichLayout = Boolean(solutionSections && solutionSections.length > 0)
 
 // Experiment: image lightbox, scoped to a single project for now while we
 // try it out. Promote to a frontmatter field once the pattern is validated.
-const hasImageLightbox = project.slug === "accuray-radiotherapy"
+const hasImageLightbox = project.slug === "accuray-radiotherapy" || project.slug === "accuray"
 
 const approachIcons = {
   users: Users,
   search: Search,
   "message-square": MessageSquare,
   star: Star,
+  lock: Lock,
 }
 
 const navItems = [
-  { id: "problem", label: "The Problem", show: Boolean(problem) },
-  { id: "approach", label: "Approach", show: Boolean(approachItems?.length) },
-  { id: "solutions", label: "Solutions", show: Boolean(solutionSections?.length) },
-  { id: "impact", label: "Impact", show: Boolean(highlights?.length) },
+  { id: "problem", label: problemLabel, show: Boolean(problem) },
+  { id: "approach", label: approachLabel, show: Boolean(approachItems?.length) },
+  { id: "solutions", label: solutionsLabel, show: Boolean(solutionSections?.length) },
+  { id: "impact", label: impactLabel, show: Boolean(highlights?.length || highlightGroups?.length) },
 ].filter((item) => item.show)
 
 // Splits a highlight string on *emphasis* markers so key phrases can be
@@ -186,7 +192,7 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
           <div class="mx-auto flex w-full max-w-5xl flex-col gap-24 px-6 py-16 sm:px-8">
             {problem && (
               <div id="problem" data-reveal data-reveal-group class={rowClass}>
-                <p class={labelClass}>The Problem</p>
+                <p class={labelClass}>{problemLabel}</p>
                 <div class="flex flex-col gap-5">
                   <p class="text-base leading-relaxed text-muted-foreground">{problem.intro}</p>
                   {problem.points && problem.points.length > 0 && (
@@ -220,7 +226,7 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
 
             {approachItems && approachItems.length > 0 && (
               <div id="approach" data-reveal data-reveal-group class={rowClass}>
-                <p class={labelClass}>Approach</p>
+                <p class={labelClass}>{approachLabel}</p>
                 <div class="grid grid-cols-1 gap-8 sm:grid-cols-2">
                   {approachItems.map((item) => {
                     const Icon = approachIcons[item.icon]
@@ -240,7 +246,7 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
 
             {solutionSections && solutionSections.length > 0 && (
               <div id="solutions" data-reveal data-reveal-group class={rowClass}>
-                <p class={labelClass}>Solutions</p>
+                <p class={labelClass}>{solutionsLabel}</p>
                 <div class="flex flex-col gap-16">
                   {solutionSections.map((section) => (
                     <CaseStudySection
@@ -261,12 +267,12 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
           </div>
         </div>
 
-        {(highlights?.length || testimonial || ctaHeading) && (
+        {(highlights?.length || highlightGroups?.length || testimonial || ctaHeading) && (
           <div style={heroStyle} class="w-full text-foreground">
             <div data-reveal-group class="mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 py-16 sm:px-8">
               {highlights && highlights.length > 0 && (
                 <div id="impact" data-reveal class={rowClass}>
-                  <p class={`${labelClass} !text-accent`}>Impact</p>
+                  <p class={`${labelClass} !text-accent`}>{impactLabel}</p>
                   <ul class="flex flex-col gap-6">
                     {highlights.map((item) => (
                       <li class="flex items-start gap-4">
@@ -279,6 +285,31 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
                       </li>
                     ))}
                   </ul>
+                </div>
+              )}
+
+              {highlightGroups && highlightGroups.length > 0 && (
+                <div id="impact" data-reveal class={rowClass}>
+                  <p class={`${labelClass} !text-accent`}>{impactLabel}</p>
+                  <div class="flex flex-col gap-8">
+                    {highlightGroups.map((group) => (
+                      <div class="flex flex-col gap-4">
+                        <p class="text-sm font-medium text-foreground">{group.label}</p>
+                        <ul class="flex flex-col gap-6">
+                          {group.items.map((item) => (
+                            <li class="flex items-start gap-4">
+                              <span class="mt-2.5 size-1.5 shrink-0 rounded-full bg-accent" />
+                              <span class="text-lg leading-relaxed">
+                                {splitHighlight(item).map((part) =>
+                                  part.emphasis ? <span class="text-accent">{part.text}</span> : part.text
+                                )}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -357,14 +388,14 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
           <nav
             id="case-study-nav"
             aria-label="Case study sections"
-            style={{ "--nav-color": "#ffffff", transition: "color 0.3s ease" }}
             class="hidden lg:fixed lg:top-1/2 lg:left-8 lg:z-10 lg:flex lg:w-36 lg:-translate-y-1/2 lg:flex-col lg:gap-3"
           >
             {navItems.map((item) => (
               <a
                 href={`#${item.id}`}
                 data-nav-link={item.id}
-                class="text-[var(--nav-color)] text-sm opacity-70 transition-opacity hover:opacity-100 data-[active=true]:font-medium data-[active=true]:opacity-100"
+                style={{ color: "#ffffff" }}
+                class="text-sm font-medium transition-[text-decoration-color] hover:underline data-[active=true]:font-semibold"
               >
                 {item.label}
               </a>
@@ -376,7 +407,7 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
           function initCaseStudyNav() {
             const nav = document.getElementById("case-study-nav")
             if (!nav) return
-            const links = Array.from(nav.querySelectorAll("[data-nav-link]"))
+            const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"))
             const sections = links
               .map((link) => document.getElementById(link.getAttribute("data-nav-link") ?? ""))
               .filter((el): el is HTMLElement => Boolean(el))
@@ -403,25 +434,27 @@ const rowClass = "grid grid-cols-1 gap-6 scroll-mt-28 md:grid-cols-[200px_1fr] m
             )
             sections.forEach((section) => observer.observe(section))
 
-            // The nav is fixed at the vertical center of the viewport, so it
-            // drifts over both the always-purple hero/impact sections and
-            // the content zone (which follows the light/dark toggle). A
-            // single static color can't stay legible against both, so we
-            // watch whether the content zone currently covers the nav's
-            // position and switch between a fixed light color (for the
-            // purple sections) and the toggle-aware surface color.
+            // The nav is fixed at the vertical center of the viewport, so
+            // individual links can end up over the always-purple hero/impact
+            // sections or over the content zone (light/dark surface) at the
+            // same time. A single shared color can't stay legible against
+            // both at once, so each link's color is set independently based
+            // on whether its own vertical position currently sits over the
+            // content zone.
             const contentZone = document.getElementById("content-zone")
             if (contentZone) {
-              const zoneObserver = new IntersectionObserver(
-                ([entry]) => {
-                  nav.style.setProperty(
-                    "--nav-color",
-                    entry.isIntersecting ? "var(--surface-foreground)" : "#ffffff"
-                  )
-                },
-                { rootMargin: "-50% 0px -50% 0px" }
-              )
-              zoneObserver.observe(contentZone)
+              function updateLinkColors() {
+                const zoneRect = contentZone!.getBoundingClientRect()
+                links.forEach((link) => {
+                  const linkRect = link.getBoundingClientRect()
+                  const linkCenter = linkRect.top + linkRect.height / 2
+                  const overZone = linkCenter >= zoneRect.top && linkCenter <= zoneRect.bottom
+                  link.style.color = overZone ? "var(--surface-foreground)" : "#ffffff"
+                })
+              }
+              updateLinkColors()
+              window.addEventListener("scroll", updateLinkColors, { passive: true })
+              window.addEventListener("resize", updateLinkColors)
             }
           }
 

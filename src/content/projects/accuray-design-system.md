@@ -1,4 +1,6 @@
 ---
+# Superseded by accuray.md, which merges this and accuray-radiotherapy.md
+# into one case study. Kept in draft for reference.
 title: "Design system from zero, at enterprise scale"
 description: "Building Accuray's first design system from scratch — tokens, components, and AI-assisted documentation for nine satellite products."
 company: "Accuray (via Gorilla Logic)"
@@ -65,5 +67,5 @@ highlights:
 ctaHeading: "Contact me for the full case-study"
 type: "professional"
 sortOrder: 2
-draft: false
+draft: true
 ---

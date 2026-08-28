@@ -1,4 +1,6 @@
 ---
+# Superseded by accuray.md, which merges this and accuray-design-system.md
+# into one case study. Kept in draft for reference.
 title: "Evolving a radiotherapy system into web"
 description: "Merging two legacy desktop radiotherapy planning systems into one FDA-regulated web platform for Accuray."
 company: "Accuray"
@@ -67,5 +69,5 @@ testimonial:
 ctaHeading: "Contact me for the full case-study"
 type: "professional"
 sortOrder: 3
-draft: false
+draft: true
 ---

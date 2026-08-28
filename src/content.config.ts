@@ -1,6 +1,6 @@
 import { defineCollection, z } from "astro:content"
 
-const approachIcon = z.enum(["users", "search", "message-square", "star"])
+const approachIcon = z.enum(["users", "search", "message-square", "star", "lock"])
 
 const solutionSection = z.object({
   heading: z.string(),
@@ -59,6 +59,19 @@ const projects = defineCollection({
       .optional(),
     solutionSections: z.array(solutionSection).optional(),
     highlights: z.array(z.string()).optional(),
+    // Grouped alternative to `highlights`, for a project whose impact
+    // splits into distinct categories (e.g. product metrics vs. design
+    // system metrics). Rendered instead of `highlights` when present.
+    highlightGroups: z
+      .array(z.object({ label: z.string(), items: z.array(z.string()) }))
+      .optional(),
+    // Per-project overrides for the rich layout's section labels (nav +
+    // eyebrow headings), defaulting to the original wording so existing
+    // projects render unchanged.
+    problemLabel: z.string().default("The Problem"),
+    approachLabel: z.string().default("Approach"),
+    solutionsLabel: z.string().default("Solutions"),
+    impactLabel: z.string().default("Impact"),
     testimonial: z
       .object({
         quote: z.string(),

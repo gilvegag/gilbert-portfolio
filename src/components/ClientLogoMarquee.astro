@@ -31,9 +31,9 @@ const logos = [
   class="group relative w-full min-w-0 overflow-hidden"
   style="mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);"
 >
-  <ul data-marquee class="logo-marquee-track flex w-max items-center gap-10">
+  <ul data-marquee class="logo-marquee-track flex w-max items-center">
     {[...logos, ...logos].map((logo) => (
-      <li class:list={["flex shrink-0 items-center", logo.heightClass]}>
+      <li class:list={["flex shrink-0 items-center mr-10", logo.heightClass]}>
         <img
           src={logo.src}
           alt={logo.alt}
