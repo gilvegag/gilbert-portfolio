@@ -146,13 +146,13 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
         </p>
         <div
           data-reveal-group
-          class="flex flex-wrap items-center gap-2 pt-4"
+          class="flex flex-wrap items-center gap-4 pt-4"
         >
           {heroTags.map((tag) => (
             <span
               data-reveal
               class:list={[
-                "tag-sticker inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-sm font-medium ring-1 ring-foreground/10",
+                "tag-sticker inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[13px] font-medium ring-1 ring-foreground/10",
                 tag.color,
               ]}
               style={{ "--rotate": tag.rotate, "--lift": tag.lift }}
