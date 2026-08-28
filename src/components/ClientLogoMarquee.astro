@@ -28,12 +28,12 @@ const logos = [
 ---
 
 <div
-  class="group relative w-full min-w-0 overflow-hidden"
+  class="relative mx-auto w-full max-w-2xl min-w-0 overflow-hidden"
   style="mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);"
 >
   <ul data-marquee class="logo-marquee-track flex w-max items-center">
     {[...logos, ...logos].map((logo) => (
-      <li class:list={["flex shrink-0 items-center mr-10", logo.heightClass]}>
+      <li class:list={["flex shrink-0 items-center mr-14", logo.heightClass]}>
         <img
           src={logo.src}
           alt={logo.alt}
@@ -50,8 +50,5 @@ const logos = [
 <style>
   .logo-marquee-track {
     animation: marquee-left 32s linear infinite;
-  }
-  .group:hover .logo-marquee-track {
-    animation-play-state: paused;
   }
 </style>

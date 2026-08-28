@@ -10,20 +10,34 @@ interface Props {
   alt: string
   class?: string
   aspectClass?: string
+  // Source image and frame are nearly the same aspect ratio, so plain
+  // object-position has no crop headroom to shift into — pass scale-*/
+  // translate-* utilities here instead to reframe the subject.
+  framingClass?: string
 }
 
-const { src, alt, class: className, aspectClass = "aspect-[4/5]" } = Astro.props
+const {
+  src,
+  alt,
+  class: className,
+  aspectClass = "aspect-[4/5]",
+  framingClass = "",
+} = Astro.props
 ---
 
 <div
   data-dither-photo
   class:list={[
-    "group relative isolate overflow-hidden rounded-xl ring-1 ring-foreground/10",
+    "group relative isolate overflow-hidden rounded-xl",
     className,
   ]}
 >
   <canvas data-dither-canvas class="absolute inset-0 h-full w-full"></canvas>
-  <img src={src} alt={alt} class:list={["relative z-10 w-full object-cover", aspectClass]} />
+  <img
+    src={src}
+    alt={alt}
+    class:list={["relative z-10 w-full object-cover", aspectClass, framingClass]}
+  />
 </div>
 
 <script>
