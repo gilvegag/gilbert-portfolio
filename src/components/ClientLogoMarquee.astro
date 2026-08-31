@@ -5,30 +5,24 @@
 // Same duplicate-the-list-once-and-animate-to--50% technique already used
 // by CommunityPillsMarquee/PptCarousel — the two copies must stay
 // identical for the loop to be seamless.
-// Heights are tuned per logo, not uniform — a wordmark as wide/thin as
-// Accuray's or an icon as square as LegalShield's needs a different pixel
-// height to *read* the same visual size as OatFi/Verizon at h-6.
-// width/height are each file's native pixel size — used only so the
-// browser can reserve the right aspect ratio before the image loads (no
-// layout shift, which was making the marquee visibly jump as images
-// loaded in). heightClass still governs the actual rendered size.
-// nudgeUp corrects an optical alignment issue: OatFi's and Verizon's
-// bounding boxes are geometrically centered (confirmed), but their glyphs'
-// visual weight sits low in the box, reading as sitting lower than the
-// rest of the row — a couple px upward nudge compensates.
+// Every file below is cropped tight to its own visible content (zero
+// internal padding, verified via pixel/bbox analysis) so a single shared
+// heightClass reads as consistent visual weight across the whole row —
+// no per-logo nudging needed. width/height are each file's tight-cropped
+// pixel size, used only to reserve the right aspect ratio before load.
 const logos = [
   { src: "/images/projects/accuray-radiotherapy/logo.png", alt: "Accuray", heightClass: "h-3.5", width: 990, height: 120 },
-  { src: "/images/projects/oatfi/logo.png", alt: "OatFi", heightClass: "h-6", width: 677, height: 240, nudgeUp: 2 },
-  { src: "/images/home/verizon.png", alt: "Verizon", heightClass: "h-6", width: 1227, height: 272, nudgeUp: 2 },
-  { src: "/images/home/legalshield.svg", alt: "LegalShield", heightClass: "h-7", width: 620, height: 138 },
-  { src: "/images/home/associa.svg", alt: "Associa", heightClass: "h-6", width: 210, height: 49 },
-  { src: "/images/home/therapp.svg", alt: "Therapp", heightClass: "h-6", width: 182, height: 46 },
-  { src: "/images/home/academia.svg", alt: "Academia", heightClass: "h-6", width: 236, height: 31 },
+  { src: "/images/home/oatfi.svg", alt: "OatFi", heightClass: "h-6", width: 260, height: 91, nudgeUp: 1 },
+  { src: "/images/home/verizon.png", alt: "Verizon", heightClass: "h-6", width: 831, height: 183, nudgeUp: 1 },
+  { src: "/images/home/legalshield.svg", alt: "LegalShield", heightClass: "h-6", width: 458, height: 91 },
+  { src: "/images/home/associa.svg", alt: "Associa", heightClass: "h-6", width: 389, height: 92 },
+  { src: "/images/home/therapp.svg", alt: "Therapp", heightClass: "h-6", width: 428, height: 88 },
+  { src: "/images/home/academia.svg", alt: "Academia", heightClass: "h-6", width: 505, height: 68 },
 ]
 ---
 
 <div
-  class="relative mx-auto w-full max-w-2xl min-w-0 overflow-hidden"
+  class="relative mx-auto w-full max-w-2xl min-w-0 overflow-hidden py-1"
   style="mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);"
 >
   <ul data-marquee class="logo-marquee-track flex w-max items-center">
@@ -50,5 +44,6 @@ const logos = [
 <style>
   .logo-marquee-track {
     animation: marquee-left 32s linear infinite;
+    will-change: transform;
   }
 </style>

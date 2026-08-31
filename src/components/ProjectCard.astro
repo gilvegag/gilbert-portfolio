@@ -17,9 +17,10 @@ interface Props {
   statLine?: string
   secondaryTag?: string
   rows?: { label: string; text: string }[]
+  carouselImages?: { src: string; alt?: string; fit?: "cover" | "contain"; position?: string; slidePadding?: string }[]
 }
 
-const { project, variant = "grid", statLine, secondaryTag, rows } = Astro.props
+const { project, variant = "grid", statLine, secondaryTag, rows, carouselImages } = Astro.props
 const {
   title,
   role,
@@ -55,9 +56,11 @@ const imageBg = theme ? themeGradient(theme) : undefined
 <a
   href={`/work/${project.slug}`}
   data-reveal
+  data-view-card={isDetail ? "" : undefined}
   class:list={[
     "group flex flex-col overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10 transition-colors hover:ring-foreground/20",
     isLandscape && "lg:w-full lg:flex-row",
+    isDetail && "detail-card",
   ]}
 >
   <div
@@ -69,7 +72,48 @@ const imageBg = theme ? themeGradient(theme) : undefined
       isDetail && "order-2",
     ]}
   >
-    {isCoverRight ? (
+    {isDetail && carouselImages?.length ? (
+      /* Carousel — fades between images, dots at the bottom */
+      <div class="card-carousel relative aspect-video w-full overflow-hidden md:aspect-auto md:h-full" data-card-carousel>
+        {carouselImages.map((img, i) => {
+          const useCover = img.fit === "cover" || (!img.fit && isCoverRight && i === 0)
+          const imgPosition = img.position ?? (useCover ? "left top" : "center")
+          return (
+            <div
+              class:list={[
+                "absolute inset-0 transition-opacity duration-700",
+                i === 0 ? "opacity-100" : "opacity-0 pointer-events-none",
+              ]}
+              style={img.slidePadding ? { padding: img.slidePadding } : undefined}
+              data-card-slide
+            >
+              <img
+                src={img.src}
+                alt={img.alt ?? title}
+                class:list={[
+                  "size-full",
+                  useCover ? "object-cover" : "object-contain p-6 md:p-10",
+                ]}
+                style={{ objectPosition: imgPosition }}
+                loading={i === 0 ? "eager" : "lazy"}
+              />
+            </div>
+          )
+        })}
+        <div class="absolute bottom-3 left-0 right-0 flex justify-center gap-2" data-card-dots>
+          {carouselImages.map((_, i) => (
+            <button
+              class:list={[
+                "h-1.5 rounded-full transition-all duration-300 bg-white/40",
+                i === 0 ? "w-4 bg-white/90" : "w-1.5",
+              ]}
+              data-card-dot={i}
+              aria-label={`Image ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    ) : isCoverRight ? (
       <>
         {/* Mobile: crop anchored top-left, breathing room on top/left */}
         <div class="aspect-video w-full overflow-hidden pt-6 pl-6 md:hidden">
@@ -80,11 +124,7 @@ const imageBg = theme ? themeGradient(theme) : undefined
             loading="lazy"
           />
         </div>
-        {/* Desktop: square frame (matches card height across the grid) — or,
-            for the "detail" variant, fills the full stretched card height
-            instead, since the image column there isn't the height driver
-            (the text side is). Crop anchored left, breathing room on
-            top/left/bottom. */}
+        {/* Desktop: fills the full stretched card height */}
         <div
           class:list={[
             "hidden w-full overflow-hidden pt-10 pb-10 pl-10 md:block",
@@ -101,7 +141,7 @@ const imageBg = theme ? themeGradient(theme) : undefined
       </>
     ) : (
       <>
-        {/* Mobile: full image, contained and centered, exact fit (no letterbox gap) */}
+        {/* Mobile */}
         <div class="px-6 pt-6 md:hidden">
           <div class="w-full overflow-hidden" style={{ aspectRatio: thumbnailAspect }}>
             <img
@@ -112,12 +152,7 @@ const imageBg = theme ? themeGradient(theme) : undefined
             />
           </div>
         </div>
-        {/* Desktop: square frame (matches card height across the grid) — or,
-            for the "detail" variant, fills the full stretched card height
-            instead, since the image column there isn't the height driver
-            (the text side is). OatFi's image is vertically centered; the
-            rest keep the image touching the bottom (no bottom padding),
-            matching the original crop. */}
+        {/* Desktop */}
         <div
           class:list={[
             "hidden w-full overflow-hidden px-6 pt-6 md:block",
@@ -212,3 +247,53 @@ const imageBg = theme ? themeGradient(theme) : undefined
     </div>
   )}
 </a>
+
+<style>
+  .detail-card:hover {
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  function initCardCarousels() {
+    document.querySelectorAll<HTMLElement>("[data-card-carousel]").forEach((carousel) => {
+      if (carousel.dataset.carouselInit) return
+      carousel.dataset.carouselInit = "1"
+
+      const slides = Array.from(carousel.querySelectorAll<HTMLElement>("[data-card-slide]"))
+      const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>("[data-card-dot]"))
+      if (slides.length < 2) return
+
+      let idx = 0
+
+      function goTo(n: number) {
+        slides[idx].classList.add("opacity-0", "pointer-events-none")
+        slides[idx].classList.remove("opacity-100")
+        dots[idx].classList.remove("w-4", "bg-white/90")
+        dots[idx].classList.add("w-1.5", "bg-white/40")
+
+        idx = n
+        slides[idx].classList.remove("opacity-0", "pointer-events-none")
+        slides[idx].classList.add("opacity-100")
+        dots[idx].classList.add("w-4", "bg-white/90")
+        dots[idx].classList.remove("w-1.5", "bg-white/40")
+      }
+
+      let timer = setInterval(() => goTo((idx + 1) % slides.length), 4000)
+
+      dots.forEach((dot, i) => {
+        dot.addEventListener("click", (e) => {
+          e.stopPropagation()
+          e.preventDefault()
+          clearInterval(timer)
+          goTo(i)
+          timer = setInterval(() => goTo((idx + 1) % slides.length), 4000)
+        })
+      })
+    })
+  }
+
+  document.addEventListener("DOMContentLoaded", initCardCarousels)
+  document.addEventListener("astro:page-load", initCardCarousels)
+
+</script>

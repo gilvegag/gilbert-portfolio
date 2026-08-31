@@ -6,6 +6,13 @@
 // carry their own rounded corners, so no wrapper styling is needed beyond
 // sizing. Duplicating each row's images once and animating to -50%/0
 // loops seamlessly since both halves are identical.
+interface Props {
+  // Tailwind height classes applied to each image row's <li> elements.
+  // Defaults to the full-size variant used on the about page.
+  rowHeightClass?: string
+}
+const { rowHeightClass = "h-40 sm:h-56 lg:h-72" } = Astro.props
+
 const topImages = [
   "/images/home/carousel/01top.png",
   "/images/home/carousel/02top.png",
@@ -25,7 +32,7 @@ const bottomImages = [
   <div class="relative w-full min-w-0 overflow-hidden">
     <ul data-marquee class="flex w-max items-center gap-4" style="animation: marquee-left 48s linear infinite;">
       {[...topImages, ...topImages].map((src) => (
-        <li class="flex h-40 shrink-0 items-center sm:h-56 lg:h-72">
+        <li class:list={["flex shrink-0 items-center", rowHeightClass]}>
           <img src={src} alt="" class="h-full w-auto" loading="lazy" />
         </li>
       ))}
@@ -34,7 +41,7 @@ const bottomImages = [
   <div class="relative w-full min-w-0 overflow-hidden">
     <ul data-marquee class="flex w-max items-center gap-4" style="animation: marquee-right 52s linear infinite;">
       {[...bottomImages, ...bottomImages].map((src) => (
-        <li class="flex h-40 shrink-0 items-center sm:h-56 lg:h-72">
+        <li class:list={["flex shrink-0 items-center", rowHeightClass]}>
           <img src={src} alt="" class="h-full w-auto" loading="lazy" />
         </li>
       ))}

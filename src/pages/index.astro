@@ -7,6 +7,7 @@ import { getCollection } from "astro:content"
 import { Figma, Rocket } from "lucide-react"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import ProjectCard from "@/components/ProjectCard.astro"
+import CraftCard from "@/components/CraftCard.astro"
 import ClientLogoMarquee from "@/components/ClientLogoMarquee.astro"
 import DitherHoverPhoto from "@/components/DitherHoverPhoto.astro"
 // Playful hero tags — small emoji pills instead of plain badges, each with
@@ -21,9 +22,17 @@ const heroTags = [
 ]
 
 // Shorter pull-quote versions of the full testimonials inside the case
-// studies (see oatfi.md / accuray-radiotherapy.md), plus one net-new one
-// from Ronald — no avatar on file for him yet.
-const testimonials = [
+// studies (see oatfi.md / accuray-radiotherapy.md), plus net-new ones from
+// Ronald and Luis. `company` is optional — not every quote has one on file,
+// and the byline below collapses to just the role when it's missing.
+const testimonials: {
+  quote: string
+  author: string
+  role: string
+  company?: string
+  avatar?: string
+  linkedin?: string
+}[] = [
   {
     quote:
       "Gil took dense, sensitive financial data and found a structure that didn't sacrifice accuracy for simplicity. Setting clear design standards across the product.",
@@ -51,6 +60,14 @@ const testimonials = [
     avatar: "/images/home/ronald.jpeg",
     linkedin: "https://www.linkedin.com/in/ronaldmaltes/",
   },
+  {
+    quote:
+      "Gil is rare among designers in how deeply he understands front-end constraints. He designs with component reusability and implementation in mind, which made design-to-engineering handoffs remarkably smooth.",
+    author: "Luis Pizarro",
+    role: "Senior Software Developer",
+    company: "Gorilla Logic",
+    avatar: "/images/home/pizarro.jpeg",
+  },
 ]
 
 const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
@@ -60,6 +77,21 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft)).so
 const cardStats: Record<string, { statLine: string; secondaryTag?: string }> = {
   accuray: { statLine: "25% faster workflow", secondaryTag: "B2B Healthtech" },
   oatfi: { statLine: "10+ deals closed", secondaryTag: "Fintech · 0→1 product" },
+}
+
+const carouselImagesBySlug: Record<string, { src: string; alt?: string; fit?: "cover" | "contain"; position?: string }[]> = {
+  oatfi: [
+    { src: "/images/projects/oatfi/oatfi_thumbnail_vertical.png", alt: "OatFi product dashboard", fit: "contain" },
+    { src: "/images/projects/oatfi/car02.png", alt: "OatFi interface", fit: "contain" },
+    { src: "/images/projects/oatfi/car03.png", alt: "OatFi interface", fit: "contain" },
+  ],
+  accuray: [
+    // First image: original crop — padding on 3 sides, crops at right like the pre-carousel card
+    { src: "/images/projects/accuray-radiotherapy/accuray_main_thumbnail.png", alt: "Accuray main dashboard", fit: "cover", position: "left top", slidePadding: "2.5rem 0 2.5rem 2.5rem" },
+    // New images: centered so they read cleanly
+    { src: "/images/projects/accuray-radiotherapy/Main dashboard - Venus.png", alt: "Accuray Venus dashboard", fit: "contain" },
+    { src: "/images/projects/accuray-radiotherapy/modal.png", alt: "Accuray modal dialog", fit: "contain" },
+  ],
 }
 
 // Text-left/image-right "detail" card format — see the "detail" variant
@@ -185,10 +217,11 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
         const cardVars = { "--card-top": `${100 + i * 40}px`, "--card-z": `${i + 1}` }
         const stat = cardStats[project.slug]
         const rows = detailRowsBySlug[project.slug]
+        const carouselImages = carouselImagesBySlug[project.slug]
         return (
           <div class="static lg:sticky lg:top-[var(--card-top)] lg:z-[var(--card-z)]" style={cardVars}>
             {rows ? (
-              <ProjectCard project={project} variant="detail" rows={rows} statLine={stat?.statLine} />
+              <ProjectCard project={project} variant="detail" rows={rows} statLine={stat?.statLine} carouselImages={carouselImages} />
             ) : stat ? (
               <ProjectCard
                 project={project}
@@ -202,6 +235,15 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
           </div>
         )
       })}
+      {/* Fourth card — the craft showcase, not a case study. Continues the
+          sticky stack after the last project (hence projects.length as its
+          index) so it lands on top of the pile. */}
+      <div
+        class="static lg:sticky lg:top-[var(--card-top)] lg:z-[var(--card-z)]"
+        style={{ "--card-top": `${100 + projects.length * 40}px`, "--card-z": `${projects.length + 1}` }}
+      >
+        <CraftCard />
+      </div>
     </div>
   </section>
 
@@ -212,11 +254,14 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
     <p class="mb-6 text-xs font-medium tracking-[0.1em] text-muted-foreground uppercase">
       People notice how I work
     </p>
-    <div class="columns-1 gap-5 md:columns-2">
+    {/* Grid rather than a CSS masonry (columns-*): auto-rows-fr forces every
+        row to the same height, so all four cards match and their bylines
+        line up along a single baseline. */}
+    <div class="testimonial-grid grid grid-cols-1 gap-5 md:auto-rows-fr md:grid-cols-2">
       {testimonials.map((t, i) => (
         <div
           data-reveal
-          class:list={["testimonial-card mb-5 flex break-inside-avoid flex-col gap-6 rounded-xl bg-card p-6", i % 2 === 1 && "testimonial-card-alt"]}
+          class:list={["testimonial-card flex h-full flex-col gap-6 rounded-xl bg-card p-6", i % 2 === 1 && "testimonial-card-alt"]}
         >
           <div class="flex flex-col">
             <span class="-mb-2 text-6xl leading-none font-black text-muted-foreground/40" aria-hidden="true">
@@ -241,7 +286,7 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
               ) : (
                 <span class="font-medium text-foreground">{t.author}</span>
               )}
-              <p class="text-muted-foreground">{t.role}, {t.company}</p>
+              <p class="text-muted-foreground">{[t.role, t.company].filter(Boolean).join(", ")}</p>
             </div>
           </div>
         </div>
@@ -283,13 +328,37 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
     transform: translateY(48px) scale(0.94) rotate(-1.5deg);
     transition:
       opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+      filter 0.25s ease;
   }
   [data-reveal].testimonial-card.testimonial-card-alt {
     transform: translateY(48px) scale(0.94) rotate(1.5deg);
   }
   [data-reveal].testimonial-card.is-revealed {
     transform: none;
+  }
+
+  /* Hovering one card dims the rest so the one you're reading holds focus.
+     Dims with filter: opacity() rather than the opacity property on
+     purpose — opacity is already driven by the scroll-reveal above on the
+     same elements, over a much longer duration, so reusing it would make
+     the two fight. filter is a separate property with its own quick
+     transition (declared above), leaving the reveal untouched.
+
+     Note the :not(:hover) — the dim targets the siblings directly rather
+     than dimming everything and re-brightening the hovered one. That
+     second approach loses the cascade: :has() contributes its argument's
+     specificity, so the dim rule outweighs a plain .card:hover rule and
+     would flatten every card, hovered included. */
+  .testimonial-grid:has(.testimonial-card:hover) .testimonial-card:not(:hover) {
+    filter: opacity(0.4);
+  }
+  /* Touch devices keep :hover stuck after a tap, which would leave cards
+     dimmed with no way to clear it. */
+  @media (hover: none) {
+    .testimonial-grid:has(.testimonial-card:hover) .testimonial-card:not(:hover) {
+      filter: none;
+    }
   }
 
   /* Hero tags styled and animated like gerardmarti.info's ".sticker" tags:
