@@ -1,6 +1,5 @@
 ---
 import { ArrowRight } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 import { craftStatement, craftTheme } from "@/data/craft"
 import { themeGradient } from "@/data/project-colors"
 
@@ -22,18 +21,14 @@ const mobileImages = [
   class="group flex flex-col overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10 transition-colors hover:ring-foreground/20 lg:flex-row"
 >
   <!-- Left: text content -->
-  <div class="flex flex-col gap-4 bg-white p-8 lg:w-3/5 lg:justify-center lg:gap-5 lg:p-12 dark:bg-transparent">
-    <div class="flex flex-wrap items-center gap-3">
-      <Badge variant="secondary">Craft</Badge>
-      <span class="text-sm text-muted-foreground">Selected visual work</span>
-    </div>
+  <div class="flex flex-col gap-4 bg-white p-8 lg:w-3/5 lg:min-h-[420px] lg:justify-start lg:gap-5 lg:p-12 dark:bg-transparent">
     <h3 class="max-w-[24ch] text-3xl font-medium tracking-tight text-pretty text-foreground">
       {craftStatement}
     </h3>
     <p class="max-w-[48ch] text-sm leading-relaxed text-muted-foreground">
-      Five pieces where type, color, and hierarchy carry the product: a physical therapy
-      platform, an aesthetics booking app, consumer flows inside Verizon's design system,
-      and two brand-led launches.
+      These are projects where I shaped the visual identity from the ground up or rebuilt
+      what was there. Type, color, hierarchy, and layout doing real work inside the product,
+      not sitting on top of it.
     </p>
     <span class="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-foreground">
       See the visual work
@@ -46,7 +41,7 @@ const mobileImages = [
     style={carouselBg ? { backgroundImage: carouselBg } : undefined}
     class="craft-phone-stage flex w-full items-center overflow-hidden lg:w-2/5 lg:shrink-0"
   >
-    <ul class="craft-phone-track flex shrink-0 items-end gap-4 px-4">
+    <ul class="craft-phone-track flex shrink-0 items-end gap-4">
       {[...mobileImages, ...mobileImages].map((img, i) => (
         <li class:list={["craft-phone-item shrink-0", i % 2 === 0 ? "mb-6" : "mt-6"]}>
           <img
@@ -70,11 +65,12 @@ const mobileImages = [
   .craft-phone-track {
     animation: craft-drift 32s linear infinite;
     width: max-content;
+    will-change: transform;
   }
 
   @keyframes craft-drift {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
   }
 
 </style>

@@ -75,8 +75,8 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft)).so
 )
 
 const cardStats: Record<string, { statLine: string; secondaryTag?: string }> = {
-  accuray: { statLine: "25% faster workflow", secondaryTag: "B2B Healthtech" },
-  oatfi: { statLine: "10+ deals closed", secondaryTag: "Fintech · 0→1 product" },
+  accuray: { statLine: "5 min saved per patient", secondaryTag: "B2B Healthtech" },
+  oatfi: { statLine: "10+ deals closed using design prototypes", secondaryTag: "Fintech · 0→1 product" },
 }
 
 const carouselImagesBySlug: Record<string, { src: string; alt?: string; fit?: "cover" | "contain"; position?: string }[]> = {

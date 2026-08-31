@@ -17,7 +17,7 @@ thumbnailAspect: "1912/1758"
 heroImage: "/images/projects/accuray-design-system/design-system-thumbnail.png"
 heroLogo: "/images/projects/accuray-design-system/logo.png"
 cardTag: "Design Systems"
-cardDescription: "A healthtech company had no shared foundation and teams were duplicating work, so I pitched, led, and shipped the first design system across the platform, covering 90% of general components in the first year."
+cardDescription: "A healthtech platform where every team was rebuilding the same components. I pitched, led, and shipped the first shared design system — covering 90% of the platform's UI components in year one."
 cardHighlight: "Built from scratch"
 cardImpact: "~10 weeks dev time saved"
 problem:

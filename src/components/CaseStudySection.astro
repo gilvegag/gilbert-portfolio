@@ -10,6 +10,7 @@ interface Props {
   image?: string
   images?: string[]
   imagePosition?: "right" | "below"
+  lightbox?: boolean
   link?: { label: string; href: string }
   visual?: "diagram" | "pills" | "ppt-carousel"
   beforeAfter?: { before: string; after: string }
@@ -21,6 +22,7 @@ const {
   image,
   images,
   imagePosition = "right",
+  lightbox = false,
   link,
   visual,
   beforeAfter,
@@ -43,7 +45,7 @@ const isScrollStack = allImages.length > 1
         : imagePosition === "right"
           ? [
               "grid grid-cols-1 md:grid-cols-2",
-              isScrollStack ? "md:items-start" : "md:items-center",
+              "md:items-start",
             ]
           : "flex flex-col",
     ]}
@@ -74,11 +76,23 @@ const isScrollStack = allImages.length > 1
         <PptCarousel />
       ) : hasImages ? (
         <div class="flex flex-col gap-6">
-          {allImages.map((src) => (
-            <div class="overflow-hidden rounded-lg ring-1 ring-border">
-              <img src={src} alt={heading} class="w-full object-cover" loading="lazy" />
-            </div>
-          ))}
+          {allImages.map((src) =>
+            lightbox ? (
+              <button
+                type="button"
+                data-lightbox-trigger
+                data-lightbox-src={src}
+                data-lightbox-alt={heading}
+                class="block w-full overflow-hidden rounded-lg ring-1 ring-border"
+              >
+                <img src={src} alt={heading} class="w-full object-cover" loading="lazy" />
+              </button>
+            ) : (
+              <div class="overflow-hidden rounded-lg ring-1 ring-border">
+                <img src={src} alt={heading} class="w-full object-cover" loading="lazy" />
+              </div>
+            )
+          )}
         </div>
       ) : null
     }

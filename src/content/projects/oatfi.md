@@ -16,7 +16,7 @@ heroLogo: "/images/projects/oatfi/logo.png"
 cardTag: "Fintech"
 cardDescription: "As the only designer, I shaped how three very different types of people would use a product that only existed in code, and sales went on to close more than ten new enterprise partners with it."
 cardHighlight: "0→1 product"
-cardImpact: "10+ enterprise partners closed"
+cardImpact: "10+ enterprise partners onboarded"
 problemLabel: "Challenge & context"
 approachLabel: "Role & scope"
 solutionsLabel: "What I led"
@@ -48,18 +48,22 @@ solutionSections:
         "/images/projects/oatfi/05_docs.png",
       ]
     imagePosition: "right"
+    lightbox: true
   - heading: "A contextual side drawer for seamless integration"
     body: "The end user applies for a loan on a partner's website. Trust is fragile at this moment. I explored three patterns. A full page redirect makes the user feel like they left. A modal fails on mobile. A side drawer keeps context, feels native, and collapses into a bottom sheet on mobile. The drawer won because it solved for context, trust, and responsiveness at the same time. I designed every state with the same care. Approved is the easy screen. Declined had to feel respectful. Underwriting delayed had to communicate progress without making the user feel abandoned. In lending, edge cases are where trust is built or broken."
     image: "/images/projects/oatfi/06_bnpl.png"
     imagePosition: "below"
+    lightbox: true
   - heading: "Prototypes that could sell"
     body: "With no working product to demo, I built interactive prototypes showing the end to end experience across all three audiences. The CEO and CTO used these directly in sales meetings, closing over 10 enterprise deals without needing an engineer to explain the product."
     image: "/images/projects/oatfi/02_prototype.png"
     imagePosition: "right"
+    lightbox: true
   - heading: "A design system that let the work outlast me"
     body: "OatFi had never had design standards. Every feature started from scratch. I established the first design system as the infrastructure that made the three experiences possible. The component library and documentation gave engineering a shared language and gave the PM the ability to make consistent UX decisions when I was not available. Features shipped faster because components did not need to be reinvented. The system changed how the team worked, not just how the product looked."
     image: "/images/projects/oatfi/07_design system.png"
     imagePosition: "right"
+    lightbox: true
 highlights:
   - "*10+ enterprise partners* closed using interactive prototypes, no engineer in the room."
   - "Internal team became *self sufficient*: onboarding partners, adjusting lending caps, and managing settings without engineering."

@@ -16,9 +16,9 @@ heroImage: "/images/projects/accuray-radiotherapy/hero.png"
 heroImageRounded: false
 heroLogo: "/images/projects/accuray-radiotherapy/logo.png"
 cardTag: "Healthtech"
-cardDescription: "Redesigned the software doctors use to update cancer treatments while the patient is on the table, then built the design system that let the fix scale."
+cardDescription: "Redesigned the adaptive treatment workflow that radiation oncologists run with patients on the table — cut update time by 25% and gave each clinic back close to an hour of capacity per day."
 cardHighlight: "2 legacy systems → 1 platform"
-cardImpact: "Presented at ASTRO & ESTRO"
+cardImpact: "5 min saved per patient"
 problemLabel: "Challenge & context"
 approachLabel: "Role & scope"
 solutionsLabel: "What I led"
@@ -73,6 +73,7 @@ solutionSections:
         "/images/projects/accuray-design-system/pipeline03.png",
       ]
     imagePosition: "right"
+    lightbox: true
   - heading: "How the system works"
     body: "Figma is where tokens and components live. Claude turns that source into documentation and scaffolds the reference site in Figma Sites. Storybook is the shared workshop where design and engineering run visual QA together. Consuming products pull tokens as CSS variables and components as code, so parity is enforced by structure, not by discipline."
     imagePosition: "right"

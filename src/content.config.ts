@@ -8,6 +8,7 @@ const solutionSection = z.object({
   image: z.string().startsWith("/images/projects/").optional(),
   images: z.array(z.string().startsWith("/images/projects/")).optional(),
   imagePosition: z.enum(["right", "below"]).default("right"),
+  lightbox: z.boolean().default(false),
   link: z.object({ label: z.string(), href: z.string() }).optional(),
   visual: z.enum(["diagram", "pills", "ppt-carousel"]).optional(),
   beforeAfter: z

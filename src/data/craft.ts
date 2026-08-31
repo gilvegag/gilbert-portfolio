@@ -64,10 +64,10 @@ export interface CraftPiece {
 // One clear statement that visual quality is part of the product practice
 // (the whole point of this card existing).
 export const craftStatement =
-  "Visual quality isn't a layer I add at the end. It's part of how the product gets built."
+  "Craft that earns its place"
 
 export const craftIntro =
-  "Case studies show how I think about systems and workflows. This is the other half: the screens where type, color, imagery, and hierarchy are doing the real work."
+  "Short projects where I built or rebuilt the visual identity from scratch, translating brand into web. Type choices, color systems, layout decisions, all the things that make a product feel cohesive and intentional instead of assembled from defaults."
 
 export const craftPieces: CraftPiece[] = [
   {
