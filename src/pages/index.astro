@@ -254,42 +254,36 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
     <p class="mb-6 text-xs font-medium tracking-[0.1em] text-muted-foreground uppercase">
       People notice how I work
     </p>
-    {/* Grid rather than a CSS masonry (columns-*): auto-rows-fr forces every
-        row to the same height, so all four cards match and their bylines
-        line up along a single baseline. */}
-    <div class="testimonial-grid grid grid-cols-1 gap-5 md:auto-rows-fr md:grid-cols-2">
-      {testimonials.map((t, i) => (
-        <div
-          data-reveal
-          class:list={["testimonial-card flex h-full flex-col gap-6 rounded-xl bg-card p-6", i % 2 === 1 && "testimonial-card-alt"]}
-        >
-          <div class="flex flex-col">
-            <span class="-mb-2 text-6xl leading-none font-black text-muted-foreground/40" aria-hidden="true">
-              &ldquo;
-            </span>
-            <p class="text-lg leading-relaxed text-foreground">{t.quote}</p>
-          </div>
-          <div class="mt-auto flex items-center gap-3">
-            {t.avatar && (
-              <img src={t.avatar} alt={t.author} class="size-9 rounded-full object-cover" />
-            )}
-            <div class="text-sm">
-              {t.linkedin ? (
-                <a
-                  href={t.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="font-medium text-foreground hover:underline"
-                >
-                  {t.author}
-                </a>
-              ) : (
-                <span class="font-medium text-foreground">{t.author}</span>
-              )}
-              <p class="text-muted-foreground">{[t.role, t.company].filter(Boolean).join(", ")}</p>
+    <div class="tc-viewport" data-tc>
+      <div class="tc-track" data-tc-track>
+        {testimonials.map((t, i) => (
+          <div class:list={["tc-card", i === 0 && "is-active"]} data-tc-card={i}>
+            <span class="tc-quote-mark">&ldquo;</span>
+            <div class="tc-body">
+              <p class="tc-text">{t.quote}</p>
+              <div class="tc-byline">
+                {t.avatar && <img src={t.avatar} alt={t.author} class="tc-avatar" />}
+                <div class="tc-byline-text">
+                  {t.linkedin ? (
+                    <a href={t.linkedin} target="_blank" rel="noopener noreferrer" class="tc-author">{t.author}</a>
+                  ) : (
+                    <span class="tc-author">{t.author}</span>
+                  )}
+                  <span class="tc-role">{[t.role, t.company].filter(Boolean).join(", ")}</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        ))}
+      </div>
+    </div>
+    <div class="tc-dots" data-tc-dots>
+      {testimonials.map((_, i) => (
+        <button
+          class:list={["tc-dot", i === 0 && "is-active"]}
+          data-tc-dot={i}
+          aria-label={`Testimonial ${i + 1}`}
+        />
       ))}
     </div>
   </section>
@@ -319,46 +313,152 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
 </BaseLayout>
 
 <style>
-  /* Testimonial cards get a heavier settle-in than the site's default
-     data-reveal (slight scale + tilt easing to flat), closer to the
-     parallax-in feel on emanuelsfolio.framer.website's testimonial wall —
-     alternating cards tilt the opposite way so the wall doesn't feel
-     mechanically uniform. */
-  [data-reveal].testimonial-card {
-    transform: translateY(48px) scale(0.94) rotate(-1.5deg);
-    transition:
-      opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-      filter 0.25s ease;
+  /* ── Peeking testimonial carousel ── */
+
+  /* Viewport clips overflow; negative margin bleeds into page margins */
+  .tc-viewport {
+    position: relative;
+    overflow: hidden;
+    margin-inline: -1.5rem;
   }
-  [data-reveal].testimonial-card.testimonial-card-alt {
-    transform: translateY(48px) scale(0.94) rotate(1.5deg);
+  @media (min-width: 640px)  { .tc-viewport { margin-inline: -2rem; } }
+  @media (min-width: 1024px) { .tc-viewport { margin-inline: -3.5rem; } }
+
+  /* Gradient fade on left and right edges so peeking cards dissolve softly */
+  .tc-viewport::before,
+  .tc-viewport::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 4rem;
+    z-index: 2;
+    pointer-events: none;
   }
-  [data-reveal].testimonial-card.is-revealed {
-    transform: none;
+  .tc-viewport::before {
+    left: 0;
+    background: linear-gradient(to right, var(--background), transparent);
+  }
+  .tc-viewport::after {
+    right: 0;
+    background: linear-gradient(to left, var(--background), transparent);
+  }
+  @media (min-width: 640px) {
+    .tc-viewport::before, .tc-viewport::after { width: 5rem; }
+  }
+  @media (min-width: 1024px) {
+    .tc-viewport::before, .tc-viewport::after { width: 7rem; }
   }
 
-  /* Hovering one card dims the rest so the one you're reading holds focus.
-     Dims with filter: opacity() rather than the opacity property on
-     purpose — opacity is already driven by the scroll-reveal above on the
-     same elements, over a much longer duration, so reusing it would make
-     the two fight. filter is a separate property with its own quick
-     transition (declared above), leaving the reveal untouched.
-
-     Note the :not(:hover) — the dim targets the siblings directly rather
-     than dimming everything and re-brightening the hovered one. That
-     second approach loses the cascade: :has() contributes its argument's
-     specificity, so the dim rule outweighs a plain .card:hover rule and
-     would flatten every card, hovered included. */
-  .testimonial-grid:has(.testimonial-card:hover) .testimonial-card:not(:hover) {
-    filter: opacity(0.4);
+  /* Track: position:relative so cards can be absolute inside it. Height set by JS. */
+  .tc-track {
+    position: relative;
   }
-  /* Touch devices keep :hover stuck after a tap, which would leave cards
-     dimmed with no way to clear it. */
-  @media (hover: none) {
-    .testimonial-grid:has(.testimonial-card:hover) .testimonial-card:not(:hover) {
-      filter: none;
-    }
+
+  /* ── Card: absolutely positioned, JS controls transform & opacity ── */
+  .tc-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: min(680px, 86vw);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 1.25rem;
+    padding: 2.25rem 2rem 1.75rem 1.75rem;
+    opacity: 0;
+    cursor: pointer;
+    user-select: none;
+  }
+  .tc-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding-top: 1.25rem;
+  }
+
+  /* ── Decorative opening quote ── */
+  .tc-quote-mark {
+    display: block;
+    font-size: 7rem;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--muted-foreground);
+    opacity: 0.4;
+    margin-bottom: 0;
+    font-family: inherit; /* sans-serif, matches site font */
+    user-select: none;
+  }
+
+  /* ── Quote ── */
+  .tc-text {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: var(--foreground);
+    margin: 0 0 1.5rem;
+    flex: 1;
+  }
+
+  /* ── Byline ── */
+  .tc-byline {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .tc-avatar {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+  .tc-byline-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .tc-author {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--foreground);
+    text-decoration: none;
+    line-height: 1.2;
+  }
+  .tc-author:hover { text-decoration: underline; }
+  .tc-role {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    line-height: 1.3;
+  }
+
+  /* ── Dot indicators ── */
+  .tc-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.375rem;
+    margin-top: 1.25rem;
+  }
+  .tc-dot {
+    height: 6px;
+    width: 6px;
+    border-radius: 9999px;
+    border: none;
+    background: var(--muted-foreground);
+    opacity: 0.35;
+    cursor: pointer;
+    padding: 0;
+    transition: width 0.3s ease, opacity 0.3s ease;
+  }
+  .tc-dot.is-active {
+    width: 20px;
+    opacity: 1;
+    background: var(--foreground);
+    cursor: default;
   }
 
   /* Hero tags styled and animated like gerardmarti.info's ".sticker" tags:
@@ -434,4 +534,132 @@ const detailRowsBySlug: Record<string, { label: string; text: string }[]> = {
   } else {
     initHoverTags()
   }
+
+  function initTestimonialCarousel() {
+    const track = document.querySelector<HTMLElement>("[data-tc-track]")
+    if (!track) return
+
+    const orig = Array.from(track.querySelectorAll<HTMLElement>("[data-tc-card]"))
+    const n = orig.length
+    const GAP = 20 // px between cards
+
+    // pos[i] = slot of card i. 0=center, ±1=peek (visible), ±2=off-screen buffer.
+    // Initial: card0=center, card1=right, card(n-1)=left, remaining=off-screen right.
+    const pos: number[] = new Array(n).fill(0)
+    pos[0] = 0
+    pos[1 % n] = 1
+    pos[(n - 1) % n] = -1
+    for (let i = 0; i < n; i++) {
+      if (i !== 0 && i !== 1 % n && i !== (n - 1) % n) pos[i] = 2
+    }
+
+    let cur = 0
+    let locked = false
+
+    function step() { return orig[0].offsetWidth + GAP }
+
+    function placeCard(i: number, slot: number, animated: boolean) {
+      const card = orig[i]
+      const isActive = i === cur
+      const tw = track.offsetWidth
+      const cw = card.offsetWidth
+      const tx = tw / 2 + slot * step() - cw / 2
+      if (!animated) {
+        card.style.transition = "none"
+        void card.offsetWidth // flush so "none" commits before transform
+      } else {
+        card.style.transition =
+          "transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease"
+      }
+      card.style.transform = `translateX(${tx}px) scale(${isActive ? 1 : 0.93})`
+      card.style.opacity   = isActive ? "1" : "0.35"
+      card.style.cursor    = isActive ? "default" : "pointer"
+    }
+
+    const dots = Array.from(document.querySelectorAll<HTMLElement>("[data-tc-dot]"))
+
+    function syncDots() {
+      dots.forEach((d, i) => d.classList.toggle("is-active", i === cur))
+    }
+
+    function placeAll(animated: boolean) {
+      // Equalize heights so cards don't shift the layout on change
+      orig.forEach(c => (c.style.minHeight = ""))
+      const maxH = Math.max(...orig.map(c => c.offsetHeight))
+      orig.forEach(c => (c.style.minHeight = maxH + "px"))
+      for (let i = 0; i < n; i++) placeCard(i, pos[i], animated)
+      track.style.height = maxH + "px"
+      syncDots()
+    }
+
+    function advance(dir: 1 | -1) {
+      if (locked) return
+      locked = true
+
+      // If no card is buffered on the entry side, silently move the opposite buffer there.
+      // Both ±2 are off-screen so this teleport is invisible.
+      const entrySlot = dir * 2
+      const exitSlot  = -dir * 2
+      if (!pos.some(p => p === entrySlot)) {
+        const bi = pos.findIndex(p => p === exitSlot)
+        if (bi !== -1) { pos[bi] = entrySlot; placeCard(bi, entrySlot, false) }
+      }
+
+      // Slide all cards by one slot
+      for (let i = 0; i < n; i++) pos[i] -= dir
+      cur = (cur + dir + n) % n
+      placeAll(true)
+
+      // After the slide, teleport the card that exited to the entry buffer
+      setTimeout(() => {
+        const ei = pos.findIndex(p => p === exitSlot)
+        if (ei !== -1) { pos[ei] = entrySlot; placeCard(ei, entrySlot, false) }
+        syncDots()
+        locked = false
+      }, 620)
+    }
+
+    document.querySelector("[data-tc-prev]")?.addEventListener("click", () => advance(-1))
+    document.querySelector("[data-tc-next]")?.addEventListener("click", () => advance(1))
+
+    orig.forEach((card, i) => {
+      card.addEventListener("click", () => {
+        if (i === cur) return
+        advance(pos[i] > 0 ? 1 : -1)
+        startTimer()
+      })
+    })
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener("click", () => {
+        if (i === cur) return
+        advance(i > cur ? 1 : -1)
+        startTimer()
+      })
+    })
+
+    let timer: ReturnType<typeof setInterval> | null = null
+    function startTimer() {
+      if (timer) clearInterval(timer)
+      timer = setInterval(() => advance(1), 8000)
+    }
+    function stopTimer() {
+      if (timer) { clearInterval(timer); timer = null }
+    }
+
+    // Pause on hover so the user can read comfortably
+    const outer = document.querySelector<HTMLElement>("[data-tc]")
+    outer?.addEventListener("mouseenter", stopTimer)
+    outer?.addEventListener("mouseleave", startTimer)
+
+    requestAnimationFrame(() => { placeAll(false); startTimer() })
+    window.addEventListener("resize", () => placeAll(false), { passive: true })
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTestimonialCarousel)
+  } else {
+    initTestimonialCarousel()
+  }
+
 </script>
