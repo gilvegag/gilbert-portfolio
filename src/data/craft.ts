@@ -72,9 +72,9 @@ export const craftIntro =
 export const craftPieces: CraftPiece[] = [
   {
     name: "Therapp",
-    kind: "Physical therapy platform",
+    kind: "Physical therapy app, 2025",
     favicon: "/images/projects/visual/therapp/fav.png",
-    note: "Exercise library and patient flows. Dense, image-led cards that stay scannable, on a warm purple system tuned to read at a glance mid-session.",
+    note: "The original app had aged out. Fragmented structure and technical debt made the experience hard to sustain for both therapist and patient. I took an incomplete UX proposal and designed the full interaction layer: therapists build flexible routines and review patient records, patients follow guided exercises and track their own progress.",
     panelBg: "linear-gradient(to right, #3A2E5C, #1E1438)",
     video: {
       src: "/images/projects/visual/therapp_website.mp4",
@@ -96,9 +96,9 @@ export const craftPieces: CraftPiece[] = [
   },
   {
     name: "Bond",
-    kind: "Aesthetics booking app",
+    kind: "Aesthetics booking, iOS, 2019",
     favicon: "/images/projects/visual/Bond/fav.png",
-    note: "Booking flow built on full-bleed photography and mono type, where a two-color system and typographic scale carry the entire product with almost no chrome.",
+    note: "Full interaction design for the iOS app, with a look and feel built from scratch for a premium, style-conscious audience. Two-color system, full-bleed photography, and a typographic scale doing all the work with almost no chrome.",
     panelBg: "linear-gradient(to right, #2A1E14, #100B07)",
     phoneSpread: true,
     images: [
@@ -121,9 +121,9 @@ export const craftPieces: CraftPiece[] = [
   },
   {
     name: "Verizon",
-    kind: "Consumer web and mobile",
+    kind: "Consumer web and mobile, 2014",
     favicon: "/images/projects/visual/verizonfav.png",
-    note: "Offers, plan management, and self-serve data flows designed inside an enterprise design system, where the constraint is working within the system rather than around it.",
+    note: "Adapted Verizon's updated brand identity to the web and iOS app during their major visual refresh. Offers, plan management, and self-serve data flows brought in line with the new system — working within the enterprise design language rather than around it.",
     panelBg: "linear-gradient(to right, #2A1A1A, #150C0C)",
     sideBySide: true,
     images: [
@@ -141,9 +141,9 @@ export const craftPieces: CraftPiece[] = [
   },
   {
     name: "Academia Nauta",
-    kind: "B2B learning platform",
+    kind: "B2B learning platform, 2026",
     favicon: "/images/projects/visual/Nauta/fav.png",
-    note: "Marketing surface and product dashboard sharing one type and color system, so the promise on the landing page and the product behind the login read as the same thing.",
+    note: "Full interaction design and a new brand identity for a B2B audience — businesses looking to upskill their teams. The system needed to read as credible and professional for decision-makers while staying grounded enough to feel approachable.",
     panelBg: "linear-gradient(to right, #253580, #1A2657)",
     video: {
       src: "/images/projects/visual/Nauta/Website Promo - Nauta.mp4",
